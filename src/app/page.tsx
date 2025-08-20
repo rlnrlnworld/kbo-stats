@@ -1,6 +1,7 @@
 "use client"
 
 import { useTeams } from '@/hooks/useTeams'
+import { TrendingUp } from 'lucide-react'
 import React, { useEffect, useState } from 'react'
 
 
@@ -107,74 +108,82 @@ export default function Home() {
               )}
 
               {!loading && !error && (
-                <div className="border-t border-neutral-200">
-                  {validTeams.map((team) => (
-                    <div
-                      key={team.id}
-                      className={`
-                        grid grid-cols-6 gap-8 py-8 border-b border-neutral-100 
-                        items-center cursor-pointer transition-all duration-200
-                        hover:-mx-8 hover:px-8
-                        ${getTeamHoverClass(team.id)}
-                      `}
-                    >
-                      {/* Team Name */}
-                      <div className="flex items-center gap-4">
-                        <div className={`w-2 h-2 rounded-full ${team.color}`}></div>
-                        <span className="text-base font-normal text-neutral-900">
-                          {team.name}
-                        </span>
-                      </div>
+                <div className='flex flex-col'>
+                  <div className='flex justify-end mb-0.5 text-neutral-900'>
+                    <button className='text-sm flex items-center gap-2'>
+                      <TrendingUp size={18} strokeWidth={0.5} />
+                      순위 변동 그래프로 보기
+                    </button>
+                  </div>
+                  <div className="border-t border-neutral-200">
+                    {validTeams.map((team) => (
+                      <div
+                        key={team.id}
+                        className={`
+                          grid grid-cols-6 gap-8 py-8 border-b border-neutral-100 
+                          items-center cursor-pointer transition-all duration-200
+                          hover:-mx-8 hover:px-8
+                          ${getTeamHoverClass(team.id)}
+                        `}
+                      >
+                        {/* Team Name */}
+                        <div className="flex items-center gap-4">
+                          <div className={`w-2 h-2 rounded-full ${team.color}`}></div>
+                          <span className="text-base font-normal text-neutral-900">
+                            {team.name}
+                          </span>
+                        </div>
 
-                      {/* Wins */}
-                      <div className="text-right">
-                        <div className="text-xs text-neutral-400 uppercase tracking-wider mb-1">
-                          승
+                        {/* Wins */}
+                        <div className="text-right">
+                          <div className="text-xs text-neutral-400 uppercase tracking-wider mb-1">
+                            승
+                          </div>
+                          <div className="text-base text-neutral-900 font-mono">
+                            {team.wins}
+                          </div>
                         </div>
-                        <div className="text-base text-neutral-900 font-mono">
-                          {team.wins}
-                        </div>
-                      </div>
 
-                      <div className="text-right">
-                        <div className="text-xs text-neutral-400 uppercase tracking-wider mb-1">
-                          무
+                        <div className="text-right">
+                          <div className="text-xs text-neutral-400 uppercase tracking-wider mb-1">
+                            무
+                          </div>
+                          <div className="text-base text-neutral-900 font-mono">
+                            {team.ties}
+                          </div>
                         </div>
-                        <div className="text-base text-neutral-900 font-mono">
-                          {team.ties}
-                        </div>
-                      </div>
 
-                      {/* Losses */}
-                      <div className="text-right">
-                        <div className="text-xs text-neutral-400 uppercase tracking-wider mb-1">
-                          패
+                        {/* Losses */}
+                        <div className="text-right">
+                          <div className="text-xs text-neutral-400 uppercase tracking-wider mb-1">
+                            패
+                          </div>
+                          <div className="text-base text-neutral-900 font-mono">
+                            {team.losses}
+                          </div>
                         </div>
-                        <div className="text-base text-neutral-900 font-mono">
-                          {team.losses}
-                        </div>
-                      </div>
 
-                      <div className="text-right">
-                        <div className="text-xs text-neutral-400 uppercase tracking-wider mb-1">
-                          게임차
+                        <div className="text-right">
+                          <div className="text-xs text-neutral-400 uppercase tracking-wider mb-1">
+                            게임차
+                          </div>
+                          <div className="text-base text-neutral-900 font-mono">
+                            {team.gamesBack}
+                          </div>
                         </div>
-                        <div className="text-base text-neutral-900 font-mono">
-                          {team.gamesBack}
-                        </div>
-                      </div>
 
-                      {/* Win Rate */}
-                      <div className="text-right">
-                        <div className="text-xs text-neutral-400 uppercase tracking-wider mb-1">
-                          승률
-                        </div>
-                        <div className="text-base text-neutral-900 font-mono font-semibold">
-                          {team.winRate.toFixed(3)}
+                        {/* Win Rate */}
+                        <div className="text-right">
+                          <div className="text-xs text-neutral-400 uppercase tracking-wider mb-1">
+                            승률
+                          </div>
+                          <div className="text-base text-neutral-900 font-mono font-semibold">
+                            {team.winRate.toFixed(3)}
+                          </div>
                         </div>
                       </div>
-                    </div>
-                  ))}
+                    ))}
+                  </div>
                 </div>
               )}
             </section>

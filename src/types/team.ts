@@ -18,13 +18,28 @@ export interface TeamStats {
   homeRecord: string
   awayRecord: string
 }
+export interface TeamRankHistory {
+  teamId: string
+  date: string
+  rank: number
+  wins: number
+  losses: number
+  winRate: number
+}
+
+export interface RankingChart {
+  teams: TeamRankHistory[]
+  dateRange: {
+    start: string
+    end: string
+  }
+}
 
 export const TEAM_IDS = [
   'kia', 'samsung', 'lg', 'kt', 'kiwoom', 
   'nc', 'lotte', 'ssg', 'doosan', 'hanwha'
 ] as const
 
-// 크롤링할 때 팀 이름 → ID 매핑
 export const TEAM_NAME_TO_ID: Record<string, string> = {
   'KIA': 'kia',
   'KIA 타이거즈': 'kia',
