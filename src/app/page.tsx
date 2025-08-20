@@ -110,8 +110,8 @@ export default function Home() {
               )}
 
               {!loading && !error && (
-                <div className='flex flex-col'>
-                  <div className='flex justify-end mb-1 text-neutral-900'>
+                <div className='flex flex-col pb-40'>
+                  <div className='flex justify-end mb-1.5 text-neutral-900'>
                     {showChart ? (
                       <button onClick={() => setShowChart(!showChart)} className='text-sm flex items-center gap-2 p-1 rounded-md hover:bg-neutral-100 transition-colors cursor-pointer'>
                         <ListOrdered size={18} strokeWidth={1} />
