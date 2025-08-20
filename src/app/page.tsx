@@ -83,7 +83,7 @@ export default function Home() {
                   정규시즌 현재 순위
                 </p>
                 <p className="text-sm text-neutral-500">
-                  {today.getFullYear()}.{today.getMonth().toString().padStart(2, '0')}.{today.getDate().toString().padStart(2, '0')} 기준
+                  {today.getFullYear()}.{(today.getMonth() + 1).toString().padStart(2, '0')}.{today.getDate().toString().padStart(2, '0')} 기준
                 </p>
               </div>
 
@@ -112,7 +112,7 @@ export default function Home() {
                     <div
                       key={team.id}
                       className={`
-                        grid grid-cols-5 gap-8 py-8 border-b border-neutral-100 
+                        grid grid-cols-6 gap-8 py-8 border-b border-neutral-100 
                         items-center cursor-pointer transition-all duration-200
                         hover:-mx-8 hover:px-8
                         ${getTeamHoverClass(team.id)}
@@ -152,6 +152,15 @@ export default function Home() {
                         </div>
                         <div className="text-base text-neutral-900 font-mono">
                           {team.losses}
+                        </div>
+                      </div>
+
+                      <div className="text-right">
+                        <div className="text-xs text-neutral-400 uppercase tracking-wider mb-1">
+                          게임차
+                        </div>
+                        <div className="text-base text-neutral-900 font-mono">
+                          {team.gamesBack}
                         </div>
                       </div>
 
