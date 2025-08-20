@@ -40,7 +40,7 @@ export default function Home() {
             KBO
           </h1>
           <p className="text-lg text-neutral-600 font-normal">
-            2024 시즌 기록
+            {new Date().getFullYear()} 시즌 기록
           </p>
         </header>
 
