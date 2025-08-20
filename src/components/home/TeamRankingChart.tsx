@@ -1,7 +1,8 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
 'use client';
 
-import React, { useState } from 'react';
+import { useRankingHistory } from '@/hooks/useRankingHistory';
+import React, { useEffect, useState } from 'react';
 import { LineChart, Line, XAxis, YAxis, CartesianGrid, ResponsiveContainer, Legend, Tooltip } from 'recharts';
 
 const generateMockRankingData = () => {
@@ -46,6 +47,11 @@ const teamColors = {
 export default function TeamRankingChart() {
   const [selectedTeams, setSelectedTeams] = useState<string[]>(['KIA', 'LG', '삼성']);
   const [period, setPeriod] = useState<'7' | '14' | '30'>('30');
+
+  const { rankingHistory } = useRankingHistory(Number(period))
+  useEffect(() => {
+    console.log(rankingHistory)
+  }, [rankingHistory])
   
   const data = generateMockRankingData();
   const filteredData = data.slice(-parseInt(period));
