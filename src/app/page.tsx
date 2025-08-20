@@ -1,3 +1,5 @@
+"use client"
+
 import React, { useState } from 'react'
 
 // Mock 데이터
