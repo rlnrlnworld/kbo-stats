@@ -112,15 +112,15 @@ export default function Home() {
                 <div className='flex flex-col'>
                   <div className='flex justify-end mb-1 text-neutral-900'>
                     {showChart ? (
-                      <button className='text-sm flex items-center gap-2 p-1 rounded-md'>
+                      <button onClick={() => setShowChart(!showChart)} className='text-sm flex items-center gap-2 p-1 rounded-md hover:bg-gray-50 transition-colors cursor-pointer'>
                         <ListOrdered size={18} strokeWidth={1} />
                         순위 차트로 보기
                       </button>
                     ) : (
-                      <button className='text-sm flex items-center gap-2 p-1 rounded-md'>
-                      <TrendingUp size={18} strokeWidth={1} />
-                      순위 변동 그래프로 보기
-                    </button>
+                      <button onClick={() => setShowChart(!showChart)} className='text-sm flex items-center gap-2 p-1 rounded-md hover:bg-gray-50 transition-colors cursor-pointer'>
+                        <TrendingUp size={18} strokeWidth={1} />
+                        순위 변동 그래프로 보기
+                      </button>
                     )}
                   </div>
                   <div className="border-t border-neutral-200">
