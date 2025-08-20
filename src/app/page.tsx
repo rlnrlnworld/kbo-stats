@@ -29,7 +29,7 @@ export default function Home() {
   const handleRefresh = () => {
     mutate()
   }
-
+  const today = new Date()
   return (
     <div className="min-h-screen bg-neutral-50">
       <div className="max-w-6xl mx-auto px-8">
@@ -82,6 +82,9 @@ export default function Home() {
                 <p className="text-base text-neutral-600">
                   정규시즌 현재 순위
                 </p>
+                <p className="text-sm text-neutral-500">
+                  {today.getFullYear()}.{today.getMonth().toString().padStart(2, '0')}.{today.getDate().toString().padStart(2, '0')} 기준
+                </p>
               </div>
 
               {loading && (
@@ -109,7 +112,7 @@ export default function Home() {
                     <div
                       key={team.id}
                       className={`
-                        grid grid-cols-4 gap-8 py-8 border-b border-neutral-100 
+                        grid grid-cols-5 gap-8 py-8 border-b border-neutral-100 
                         items-center cursor-pointer transition-all duration-200
                         hover:-mx-8 hover:px-8
                         ${getTeamHoverClass(team.id)}
@@ -130,6 +133,15 @@ export default function Home() {
                         </div>
                         <div className="text-base text-neutral-900 font-mono">
                           {team.wins}
+                        </div>
+                      </div>
+
+                      <div className="text-right">
+                        <div className="text-xs text-neutral-400 uppercase tracking-wider mb-1">
+                          무
+                        </div>
+                        <div className="text-base text-neutral-900 font-mono">
+                          {team.ties}
                         </div>
                       </div>
 
