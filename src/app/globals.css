@@ -3,6 +3,17 @@
 :root {
   --background: #ffffff;
   --foreground: #171717;
+
+  --team-kia: #ea0029;
+  --team-samsung: #074ca1;
+  --team-lg: #c41e3a;
+  --team-kt: #000000;
+  --team-kiwoom: #570514;
+  --team-nc: #315288;
+  --team-lotte: #041e42;
+  --team-ssg: #ce1141;
+  --team-doosan: #131230;
+  --team-hanwha: #ff6900;
 }
 
 @theme inline {
@@ -10,6 +21,17 @@
   --color-foreground: var(--foreground);
   --font-sans: var(--font-geist-sans);
   --font-mono: var(--font-geist-mono);
+
+  --color-team-kia: var(--team-kia);
+  --color-team-samsung: var(--team-samsung);
+  --color-team-lg: var(--team-lg);
+  --color-team-kt: var(--team-kt);
+  --color-team-kiwoom: var(--team-kiwoom);
+  --color-team-nc: var(--team-nc);
+  --color-team-lotte: var(--team-lotte);
+  --color-team-ssg: var(--team-ssg);
+  --color-team-doosan: var(--team-doosan);
+  --color-team-hanwha: var(--team-hanwha);
 }
 
 @media (prefers-color-scheme: dark) {
