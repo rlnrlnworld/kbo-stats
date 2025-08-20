@@ -46,3 +46,35 @@ body {
   color: var(--foreground);
   font-family: Arial, Helvetica, sans-serif;
 }
+
+/* Home - hover 클래스 정의 */
+.team-hover-kia:hover {
+  background: linear-gradient(to right, rgba(234, 0, 41, 0.1) 0%, rgba(234, 0, 41, 0.05) 20%, rgba(255, 255, 255, 0.8) 100%);
+}
+.team-hover-samsung:hover {
+  background: linear-gradient(to right, rgba(7, 76, 161, 0.1) 0%, rgba(7, 76, 161, 0.05) 20%, rgba(255, 255, 255, 0.8) 100%);
+}
+.team-hover-lg:hover {
+  background: linear-gradient(to right, rgba(196, 30, 58, 0.1) 0%, rgba(196, 30, 58, 0.05) 20%, rgba(255, 255, 255, 0.8) 100%);
+}
+.team-hover-kiwoom:hover {
+  background: linear-gradient(to right, rgba(87, 5, 20, 0.1) 0%, rgba(87, 5, 20, 0.05) 20%, rgba(255, 255, 255, 0.8) 100%);
+}
+.team-hover-nc:hover {
+  background: linear-gradient(to right, rgba(49, 82, 136, 0.1) 0%, rgba(49, 82, 136, 0.05) 20%, rgba(255, 255, 255, 0.8) 100%);
+}
+.team-hover-kt:hover {
+  background: linear-gradient(to right, rgba(0, 0, 0, 0.08) 0%, rgba(0, 0, 0, 0.04) 20%, rgba(255, 255, 255, 0.8) 100%);
+}
+.team-hover-ssg:hover {
+  background: linear-gradient(to right, rgba(206, 17, 65, 0.1) 0%, rgba(206, 17, 65, 0.05) 20%, rgba(255, 255, 255, 0.8) 100%);
+}
+.team-hover-lotte:hover {
+  background: linear-gradient(to right, rgba(4, 30, 66, 0.1) 0%, rgba(4, 30, 66, 0.05) 20%, rgba(255, 255, 255, 0.8) 100%);
+}
+.team-hover-doosan:hover {
+  background: linear-gradient(to right, rgba(19, 18, 48, 0.1) 0%, rgba(19, 18, 48, 0.05) 20%, rgba(255, 255, 255, 0.8) 100%);
+}
+.team-hover-hanwha:hover {
+  background: linear-gradient(to right, rgba(255, 105, 0, 0.1) 0%, rgba(255, 105, 0, 0.05) 20%, rgba(255, 255, 255, 0.8) 100%);
+}

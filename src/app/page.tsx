@@ -24,19 +24,7 @@ const mockPlayers = [
 ]
 
 const getTeamHoverClass = (teamId: string) => {
-  const hoverClasses: Record<string, string> = {
-    kia: 'hover:bg-gradient-to-r hover:from-red-50 hover:via-red-25 hover:to-white',
-    samsung: 'hover:bg-gradient-to-r hover:from-blue-50 hover:via-blue-25 hover:to-white',
-    lg: 'hover:bg-gradient-to-r hover:from-red-50 hover:via-red-25 hover:to-white',
-    kiwoom: 'hover:bg-gradient-to-r hover:from-red-50 hover:via-red-25 hover:to-white',
-    nc: 'hover:bg-gradient-to-r hover:from-blue-50 hover:via-blue-25 hover:to-white',
-    kt: 'hover:bg-gradient-to-r hover:from-gray-50 hover:via-gray-25 hover:to-white',
-    ssg: 'hover:bg-gradient-to-r hover:from-red-50 hover:via-red-25 hover:to-white',
-    lotte: 'hover:bg-gradient-to-r hover:from-blue-50 hover:via-blue-25 hover:to-white',
-    doosan: 'hover:bg-gradient-to-r hover:from-indigo-50 hover:via-indigo-25 hover:to-white',
-    hanwha: 'hover:bg-gradient-to-r hover:from-orange-50 hover:via-orange-25 hover:to-white',
-  }
-  return hoverClasses[teamId] || ''
+  return `team-hover-${teamId}`
 }
 
 export default function Home() {
