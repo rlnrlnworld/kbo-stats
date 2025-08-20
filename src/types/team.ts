@@ -10,6 +10,15 @@ export interface Team {
   gamesBack: number
 }
 
+export interface TeamStats {
+  teamId: string
+  runsScored: number
+  runsAllowed: number
+  homeRecord: string
+  awayRecord: string
+}
+
+
 export const TEAM_IDS = [
   'kia', 'samsung', 'lg', 'kt', 'kiwoom', 
   'nc', 'lotte', 'ssg', 'doosan', 'hanwha'
