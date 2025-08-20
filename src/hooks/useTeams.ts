@@ -17,7 +17,7 @@ export function useTeams() {
     data: teams, 
     error, 
     isLoading: loading, 
-    mutate 
+    mutate
   } = useSWR<Team[]>('/api/teams/standings', fetcher, {
     refreshInterval: 15 * 60 * 60 * 1000,
     revalidateOnFocus: false,

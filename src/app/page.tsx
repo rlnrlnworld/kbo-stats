@@ -3,19 +3,6 @@
 import { useTeams } from '@/hooks/useTeams'
 import React, { useEffect, useState } from 'react'
 
-// Mock 데이터
-const mockTeams = [
-  { id: 'kia', name: 'KIA 타이거즈', wins: 87, losses: 57, winRate: 0.604, rank: 1, color: 'bg-red-600' },
-  { id: 'samsung', name: '삼성 라이온즈', wins: 85, losses: 59, winRate: 0.590, rank: 2, color: 'bg-blue-700' },
-  { id: 'lg', name: 'LG 트윈스', wins: 79, losses: 65, winRate: 0.549, rank: 3, color: 'bg-red-700' },
-  { id: 'kiwoom', name: '키움 히어로즈', wins: 76, losses: 68, winRate: 0.528, rank: 4, color: 'bg-red-900' },
-  { id: 'nc', name: 'NC 다이노스', wins: 74, losses: 70, winRate: 0.514, rank: 5, color: 'bg-blue-800' },
-  { id: 'kt', name: 'KT 위즈', wins: 72, losses: 72, winRate: 0.500, rank: 6, color: 'bg-black' },
-  { id: 'ssg', name: 'SSG 랜더스', wins: 71, losses: 73, winRate: 0.493, rank: 7, color: 'bg-red-600' },
-  { id: 'lotte', name: '롯데 자이언츠', wins: 69, losses: 75, winRate: 0.479, rank: 8, color: 'bg-blue-900' },
-  { id: 'doosan', name: '두산 베어스', wins: 67, losses: 77, winRate: 0.465, rank: 9, color: 'bg-indigo-900' },
-  { id: 'hanwha', name: '한화 이글스', wins: 66, losses: 78, winRate: 0.458, rank: 10, color: 'bg-orange-500' },
-]
 
 const mockPlayers = [
   { rank: 1, name: '김도영', team: 'KIA', avg: '.347', hr: 38, rbi: 109, hits: 201 },
@@ -32,10 +19,20 @@ export default function Home() {
   const [activeTab, setActiveTab] = useState('batting')
   const [activeNav, setActiveNav] = useState('standings')
 
-  const { teams } = useTeams()
+  const { teams, loading, error, mutate } = useTeams()
   useEffect(() => {
     console.log(teams)
   }, [teams])
+
+  const validTeams = teams.filter(team => 
+    team.name.length > 2 &&
+    !team.name.includes('-') &&
+    team.name !== '■'
+  ).slice(0, 10)
+
+  const handleRefresh = () => {
+    mutate()
+  }
 
   return (
     <div className="min-h-screen bg-neutral-50">
@@ -91,57 +88,78 @@ export default function Home() {
                 </p>
               </div>
 
-              <div className="border-t border-neutral-200">
-                {mockTeams.map((team) => (
-                  <div
-                    key={team.id}
-                    className={`
-                      grid grid-cols-4 gap-8 py-8 border-b border-neutral-100 
-                      items-center cursor-pointer transition-all duration-200
-                      hover:-mx-8 hover:px-8
-                      ${getTeamHoverClass(team.id)}
-                    `}
+              {loading && (
+                <div className="text-center py-20 text-neutral-400">
+                  순위 데이터를 불러오는 중...
+                </div>
+              )}
+
+              {error && (
+                <div className="text-center py-20">
+                  <div className="text-red-600 mb-4">데이터를 불러올 수 없습니다</div>
+                  <div className="text-sm text-neutral-500 mb-4">{error}</div>
+                  <button 
+                    onClick={handleRefresh}
+                    className="px-6 py-2 bg-neutral-900 text-white rounded hover:bg-neutral-700 transition-colors"
                   >
-                    {/* Team Name */}
-                    <div className="flex items-center gap-4">
-                      <div className={`w-2 h-2 rounded-full ${team.color}`}></div>
-                      <span className="text-base font-normal text-neutral-900">
-                        {team.name}
-                      </span>
-                    </div>
+                    다시 시도
+                  </button>
+                </div>
+              )}
 
-                    {/* Wins */}
-                    <div className="text-right">
-                      <div className="text-xs text-neutral-400 uppercase tracking-wider mb-1">
-                        승
+              {!loading && !error && (
+                <div className="border-t border-neutral-200">
+                  {validTeams.map((team) => (
+                    <div
+                      key={team.id}
+                      className={`
+                        grid grid-cols-4 gap-8 py-8 border-b border-neutral-100 
+                        items-center cursor-pointer transition-all duration-200
+                        hover:-mx-8 hover:px-8
+                        ${getTeamHoverClass(team.id)}
+                      `}
+                    >
+                      {/* Team Name */}
+                      <div className="flex items-center gap-4">
+                        <div className={`w-2 h-2 rounded-full ${team.color}`}></div>
+                        <span className="text-base font-normal text-neutral-900">
+                          {team.name}
+                        </span>
                       </div>
-                      <div className="text-base text-neutral-900 font-mono">
-                        {team.wins}
-                      </div>
-                    </div>
 
-                    {/* Losses */}
-                    <div className="text-right">
-                      <div className="text-xs text-neutral-400 uppercase tracking-wider mb-1">
-                        패
+                      {/* Wins */}
+                      <div className="text-right">
+                        <div className="text-xs text-neutral-400 uppercase tracking-wider mb-1">
+                          승
+                        </div>
+                        <div className="text-base text-neutral-900 font-mono">
+                          {team.wins}
+                        </div>
                       </div>
-                      <div className="text-base text-neutral-900 font-mono">
-                        {team.losses}
-                      </div>
-                    </div>
 
-                    {/* Win Rate */}
-                    <div className="text-right">
-                      <div className="text-xs text-neutral-400 uppercase tracking-wider mb-1">
-                        승률
+                      {/* Losses */}
+                      <div className="text-right">
+                        <div className="text-xs text-neutral-400 uppercase tracking-wider mb-1">
+                          패
+                        </div>
+                        <div className="text-base text-neutral-900 font-mono">
+                          {team.losses}
+                        </div>
                       </div>
-                      <div className="text-base text-neutral-900 font-mono font-semibold">
-                        {team.winRate.toFixed(3)}
+
+                      {/* Win Rate */}
+                      <div className="text-right">
+                        <div className="text-xs text-neutral-400 uppercase tracking-wider mb-1">
+                          승률
+                        </div>
+                        <div className="text-base text-neutral-900 font-mono font-semibold">
+                          {team.winRate.toFixed(3)}
+                        </div>
                       </div>
                     </div>
-                  </div>
-                ))}
-              </div>
+                  ))}
+                </div>
+              )}
             </section>
           )}
 
