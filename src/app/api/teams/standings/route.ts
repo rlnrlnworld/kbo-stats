@@ -7,71 +7,57 @@ export async function GET() {
   try {
     const response = await axios.get('https://www.koreabaseball.com/Record/TeamRank/TeamRankDaily.aspx', {
       headers: {
-        'User-Agent': 'Mozilla/5.0 (compatible; KBOStatsBot/1.0)',
-        'Accept': 'text/html,application/xhtml+xml,application/xml;q=0.9,*/*;q=0.8',
+        'User-Agent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/91.0.4472.124 Safari/537.36',
       },
-      timeout: 10000,
     });
 
     const $ = cheerio.load(response.data);
     const teams: Team[] = [];
 
-    $('.tData tr').each((index, element) => {
+    $('.tData tbody tr').each((index, element) => {
       const $row = $(element);
-      const teamName = $row.find('td').eq(1).text().trim();
+      const cells = $row.find('td');
       
-      if (teamName) {
-        const teamId = getTeamId(teamName);
+      if (cells.length >= 8) { 
+        const rank = parseInt(cells.eq(0).text().trim());
+        const teamName = cells.eq(1).text().trim();
+        const wins = parseInt(cells.eq(3).text().trim());
+        const losses = parseInt(cells.eq(4).text().trim());
+        const ties = parseInt(cells.eq(5).text().trim());
+        const winRate = parseFloat(cells.eq(6).text().trim());
+        const gamesBack = parseFloat(cells.eq(7).text().trim());
         
-        const team: Team = {
-          id: teamId,
-          name: teamName,
-          shortName: teamName.split(' ')[0],
-          color: getTeamColorClass(teamId),
-          rank: index + 1,
-          wins: parseInt($row.find('td').eq(2).text()) || 0,
-          losses: parseInt($row.find('td').eq(3).text()) || 0,
-          ties: parseInt($row.find('td').eq(4).text()) || 0,
-          winRate: parseFloat($row.find('td').eq(5).text()) || 0,
-          gamesBack: parseFloat($row.find('td').eq(6).text()) || 0,
-        };
-        
-        teams.push(team);
+        if (teamName && !isNaN(rank) && !isNaN(wins) && !isNaN(losses)) {
+          const teamId = getTeamId(teamName);
+          
+          const team: Team = {
+            id: teamId,
+            name: teamName,
+            shortName: teamName,
+            color: getTeamColorClass(teamId),
+            rank,
+            wins,
+            losses,
+            ties: ties || 0,
+            winRate,
+            gamesBack: gamesBack || 0,
+          };
+          
+          teams.push(team);
+        }
       }
     });
 
-    if (teams.length === 0) {
-      return NextResponse.json(
-        { error: 'No team data found' }, 
-        { status: 404 }
-      );
-    }
-
     teams.sort((a, b) => a.rank - b.rank);
+
+    console.log('파싱된 팀 데이터:', teams);
 
     return NextResponse.json(teams);
     
   } catch (error) {
-    console.error('Crawling error:', error);
-    
-    if (axios.isAxiosError(error)) {
-      if (error.code === 'ECONNABORTED') {
-        return NextResponse.json(
-          { error: 'Request timeout - KBO website took too long to respond' }, 
-          { status: 408 }
-        );
-      }
-      
-      if (error.response?.status) {
-        return NextResponse.json(
-          { error: `KBO website returned ${error.response.status}` }, 
-          { status: 502 }
-        );
-      }
-    }
-    
+    console.error('크롤링 에러:', error);
     return NextResponse.json(
-      { error: 'Failed to fetch team standings', details: error instanceof Error ? error.message : 'Unknown error' }, 
+      { error: 'Failed to fetch team standings' }, 
       { status: 500 }
     );
   }
