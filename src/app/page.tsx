@@ -1,7 +1,7 @@
 "use client"
 
 import { useTeams } from '@/hooks/useTeams'
-import { TrendingUp } from 'lucide-react'
+import { ListOrdered, TrendingUp } from 'lucide-react'
 import React, { useEffect, useState } from 'react'
 
 
@@ -19,6 +19,7 @@ const getTeamHoverClass = (teamId: string) => {
 export default function Home() {
   const [activeTab, setActiveTab] = useState('batting')
   const [activeNav, setActiveNav] = useState('standings')
+  const [showChart, setShowChart] = useState(false)
 
   const { teams, loading, error, mutate } = useTeams()
   useEffect(() => {
@@ -109,11 +110,18 @@ export default function Home() {
 
               {!loading && !error && (
                 <div className='flex flex-col'>
-                  <div className='flex justify-end mb-0.5 text-neutral-900'>
-                    <button className='text-sm flex items-center gap-2'>
-                      <TrendingUp size={18} strokeWidth={0.5} />
+                  <div className='flex justify-end mb-1 text-neutral-900'>
+                    {showChart ? (
+                      <button className='text-sm flex items-center gap-2 p-1 rounded-md'>
+                        <ListOrdered size={18} strokeWidth={1} />
+                        순위 차트로 보기
+                      </button>
+                    ) : (
+                      <button className='text-sm flex items-center gap-2 p-1 rounded-md'>
+                      <TrendingUp size={18} strokeWidth={1} />
                       순위 변동 그래프로 보기
                     </button>
+                    )}
                   </div>
                   <div className="border-t border-neutral-200">
                     {validTeams.map((team) => (
