@@ -24,11 +24,7 @@ export default function Home() {
     console.log(teams)
   }, [teams])
 
-  const validTeams = teams.filter(team => 
-    team.name.length > 2 &&
-    !team.name.includes('-') &&
-    team.name !== '■'
-  ).slice(0, 10)
+  const validTeams = teams?.slice(0, 10)
 
   const handleRefresh = () => {
     mutate()
