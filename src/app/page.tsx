@@ -1,6 +1,7 @@
 "use client"
 
-import React, { useState } from 'react'
+import { useTeams } from '@/hooks/useTeams'
+import React, { useEffect, useState } from 'react'
 
 // Mock 데이터
 const mockTeams = [
@@ -30,6 +31,11 @@ const getTeamHoverClass = (teamId: string) => {
 export default function Home() {
   const [activeTab, setActiveTab] = useState('batting')
   const [activeNav, setActiveNav] = useState('standings')
+
+  const { teams } = useTeams()
+  useEffect(() => {
+    console.log(teams)
+  }, [teams])
 
   return (
     <div className="min-h-screen bg-neutral-50">
