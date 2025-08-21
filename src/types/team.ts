@@ -42,6 +42,12 @@ export interface TeamData {
   win_percentage: string
   record_text: string
   rank_suffix: string
+  ui_team_id: string
+  recent_form: string[]
+  current_streak: {
+    type: 'W' | 'L'
+    count: number
+  }
 }
 
 export interface RankingChart {

@@ -31,8 +31,7 @@ export async function GET(
       }, { status: 400 });
     }
 
-    // 가장 최근 날짜의 해당 팀 데이터 조회
-    const result = await sql`
+    const currentDataResult = await sql`
       SELECT 
         date,
         team_id,
@@ -53,18 +52,70 @@ export async function GET(
         );
     `;
 
-    if (result.rows.length === 0) {
+    if (currentDataResult.rows.length === 0) {
       return NextResponse.json({
         success: false,
         error: `${teamId} 팀의 데이터를 찾을 수 없습니다. (DB ID: ${dbTeamId})`
       }, { status: 404 });
     }
 
-    const teamData = result.rows[0];
+    const teamData = currentDataResult.rows[0];
     
+    const recentDataResult = await sql`
+      SELECT 
+        date,
+        wins,
+        losses,
+        ties,
+        rank
+      FROM daily_team_rankings 
+      WHERE team_id = ${dbTeamId}
+      ORDER BY date DESC 
+      LIMIT 6;
+    `;
+
+    let recentForm: string[] = [];
+    // eslint-disable-next-line prefer-const
+    let streak = { type: 'W', count: 0 };
+
+    if (recentDataResult.rows.length >= 2) {
+      const recentData = recentDataResult.rows.reverse();
+      
+      for (let i = 1; i < Math.min(6, recentData.length); i++) {
+        const prev = recentData[i - 1];
+        const curr = recentData[i];
+        
+        const winsChanged = curr.wins - prev.wins;
+        const lossesChanged = curr.losses - prev.losses;
+        
+        if (winsChanged > 0) {
+          recentForm.push('W');
+        } else if (lossesChanged > 0) {
+          recentForm.push('L');
+        } else {
+          recentForm.push('T');
+        }
+      }
+      
+      if (recentForm.length > 0) {
+        const lastResult = recentForm[recentForm.length - 1];
+        streak.type = lastResult as 'W' | 'L';
+        streak.count = 1;
+        
+        for (let i = recentForm.length - 2; i >= 0; i--) {
+          if (recentForm[i] === lastResult) {
+            streak.count++;
+          } else {
+            break;
+          }
+        }
+      }
+      
+      recentForm = recentForm.slice(-5);
+    }
+
     const totalGames = teamData.wins + teamData.losses + teamData.ties;
     const winPercentage = totalGames > 0 ? (teamData.wins / totalGames * 100).toFixed(1) : '0.0';
-
 
     return NextResponse.json({
       success: true,
@@ -75,6 +126,9 @@ export async function GET(
         win_percentage: winPercentage,
         record_text: `${teamData.wins}승 ${teamData.losses}패 ${teamData.ties}무`,
         rank_suffix: getRankSuffix(teamData.rank),
+        
+        recent_form: recentForm,
+        current_streak: streak
       }
     });
 

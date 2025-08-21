@@ -53,6 +53,10 @@ body {
   font-family: var(--font-sans);
 }
 
+/* 스크롤바 안보이게 하는 클래스명 */
+.scrollbar-hide::-webkit-scrollbar {
+  display: none !important;
+}
 /* Home - hover 클래스 정의 */
 .team-hover-kia:hover {
   background: linear-gradient(to right, rgba(234, 0, 41, 0.1) 0%, rgba(234, 0, 41, 0.05) 20%, rgba(255, 255, 255, 0.05) 100%);
