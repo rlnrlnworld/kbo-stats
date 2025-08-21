@@ -1,4 +1,5 @@
 import { TEAM_COLORS } from '@/types/team';
+import { X } from 'lucide-react';
 import Image from 'next/image';
 
 type Props = {
@@ -19,22 +20,22 @@ export default function TeamModal({ teamId, isOpen, onClose }: Props) {
         onClick={onClose}
       >
         <div 
-          className={`${color} p-6 rounded-lg max-w-md w-full mx-4 relative`}
+          className={`${color} p-6 rounded-xl max-w-xl w-full mx-4 relative`}
           onClick={(e) => e.stopPropagation()}
         >
           <button 
             onClick={onClose}
-            className="absolute top-4 right-4 text-white hover:text-gray-300"
+            className="absolute top-4 right-4 text-white/90 p-2 rounded-full hover:bg-white/10 hover:text-white cursor-pointer transition-colors ease"
           >
-            ✕
+            <X strokeWidth={1} size={20} />
           </button>
           
           <div className="flex justify-center mb-4">
             <Image
               src={`/team-logos/${teamId}.svg`}
               alt={`${teamId} 로고`}
-              width={80}
-              height={80}
+              width={150}
+              height={150}
               priority
             />
           </div>
