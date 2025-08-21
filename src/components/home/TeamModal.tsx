@@ -46,13 +46,13 @@ export default function TeamModal({ teamId, onClose }: Props) {
           
           <div className="text-center text-white mb-6">
             {isLoading ? (
-              <div className='flex flex-col items-center'>
-                <div className='h-10 w-50 rounded-md bg-white/50 animate-pulse'></div>
+              <div className='flex flex-col gap-2 items-center'>
+                <div className='h-7 w-50 rounded-md bg-white/50 animate-pulse'></div>
                 <div className='h-6 w-50 mb-2 rounded-md bg-white/50 animate-pulse'></div>
               </div>
             ): (
               <div className='flex flex-col items-center'>
-                <div className="text-4xl tracking-wider">
+                <div className="text-xl tracking-wider">
                   현재 {team?.rank}위
                 </div>
                 <div className="text-base mb-2">
@@ -115,7 +115,7 @@ export default function TeamModal({ teamId, onClose }: Props) {
                 {isLoading ? (
                   <div className='h-8 w-20 bg-neutral-200 animate-pulse rounded-md'></div>
                 ): (
-                  <h2 className="text-3xl tracking-wide mb-2">
+                  <h2 className="text-3xl font-semibold tracking-wide mb-2">
                     {teamName}
                   </h2>
                 )}
