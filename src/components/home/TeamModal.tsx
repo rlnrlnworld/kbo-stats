@@ -87,20 +87,7 @@ export default function TeamModal({ teamId, onClose }: Props) {
         </div>
         
         <div className="px-8 pt-24 pb-8">
-          {isLoading ? (
-            <div className="text-center py-8">
-              <div className="animate-pulse">
-                <div className="h-4 bg-neutral-200 rounded mb-4"></div>
-                <div className="grid grid-cols-2 gap-4 mb-6">
-                  <div className="h-8 bg-neutral-200 rounded"></div>
-                  <div className="h-8 bg-neutral-200 rounded"></div>
-                  <div className="h-8 bg-neutral-200 rounded"></div>
-                  <div className="h-8 bg-neutral-200 rounded"></div>
-                </div>
-                <div className="h-3 bg-neutral-200 rounded"></div>
-              </div>
-            </div>
-          ) : error ? (
+          {error ? (
             <div className="text-center py-8">
               <div className="text-neutral-400 mb-2">
                 데이터를 불러올 수 없습니다
@@ -109,10 +96,14 @@ export default function TeamModal({ teamId, onClose }: Props) {
             </div>
           ) : team ? (
             <div>
-              <div className="text-center mb-8">
-                <h2 className="text-2xl tracking-wide mb-2">
-                  {teamName}
-                </h2>
+              <div className="text-center mb-8 text-neutral-800">
+                {isLoading ? (
+                  <div className='h-8 w-20 bg-neutral-200 animate-pulse rounded-md'></div>
+                ): (
+                  <h2 className="text-3xl tracking-wide mb-2">
+                    {teamName}
+                  </h2>
+                )}
               </div>
   
               <div className="border-t border-neutral-100 pt-6">
