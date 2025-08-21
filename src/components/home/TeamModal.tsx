@@ -2,6 +2,7 @@ import { useTeamData } from '@/hooks/useTeamData';
 import { TEAM_COLORS } from '@/types/team';
 import { X } from 'lucide-react';
 import Image from 'next/image';
+import { useEffect } from 'react';
 
 type Props = {
   teamId: string;
@@ -12,6 +13,10 @@ export default function TeamModal({ teamId, onClose }: Props) {
 
   const color = TEAM_COLORS[teamId]
   const { team } = useTeamData(teamId)
+
+  useEffect(() => {
+    console.log(team)
+  }, [team])
 
   return (
     <>
