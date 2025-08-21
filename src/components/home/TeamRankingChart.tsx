@@ -108,12 +108,6 @@ export default function TeamRankingChart() {
               <Calendar className="h-4 w-4 mr-1" />
               {dateRange || `최근 ${period}일`}
             </div>
-            {summary.totalRecords > 0 && (
-              <div className="flex items-center">
-                <TrendingUp className="h-4 w-4 mr-1" />
-                {period}일간 데이터
-              </div>
-            )}
           </div>
         </div>
         
