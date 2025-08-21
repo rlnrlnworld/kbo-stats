@@ -28,7 +28,7 @@ export default function TeamModal({ teamId, isOpen, onClose }: Props) {
           
           <div className="flex justify-center mb-4">
             <Image
-              src={`/team-logos/${teamId}.png`}
+              src={`/team-logos/${teamId}.svg`}
               alt={`${teamId} 로고`}
               width={80}
               height={80}
