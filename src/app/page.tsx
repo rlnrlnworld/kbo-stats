@@ -349,7 +349,7 @@ export default function Home() {
       </div>
 
       {isModalOpen && (
-        <TeamModal teamId={selectedTeam} isOpen={isModalOpen} onClose={() => setIsModalOpen(false)} />
+        <TeamModal teamId={selectedTeam} onClose={() => setIsModalOpen(false)} />
       )}
     </div>
   )

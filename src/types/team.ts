@@ -27,6 +27,23 @@ export interface TeamRankHistory {
   winRate: number
 }
 
+export interface TeamData {
+  date: string
+  team_id: string
+  team_name: string
+  rank: number
+  wins: number
+  losses: number
+  ties: number
+  win_rate: number
+  games_back: number
+  created_at: string
+  total_games: number
+  win_percentage: string
+  record_text: string
+  rank_suffix: string
+}
+
 export interface RankingChart {
   teams: TeamRankHistory[]
   dateRange: {

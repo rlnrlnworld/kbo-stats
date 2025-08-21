@@ -1,17 +1,17 @@
+import { useTeamData } from '@/hooks/useTeamData';
 import { TEAM_COLORS } from '@/types/team';
 import { X } from 'lucide-react';
 import Image from 'next/image';
 
 type Props = {
   teamId: string;
-  isOpen: boolean;
   onClose: () => void;
 }
 
-export default function TeamModal({ teamId, isOpen, onClose }: Props) {
-  if (!isOpen) return null;
+export default function TeamModal({ teamId, onClose }: Props) {
 
   const color = TEAM_COLORS[teamId]
+  const { team } = useTeamData(teamId)
 
   return (
     <>
