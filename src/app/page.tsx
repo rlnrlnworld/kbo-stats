@@ -1,5 +1,6 @@
 "use client"
 
+import TeamModal from '@/components/home/TeamModal'
 import TeamRankingChart from '@/components/home/TeamRankingChart'
 import { useTeams } from '@/hooks/useTeams'
 import { ListOrdered, TrendingUp } from 'lucide-react'
@@ -21,6 +22,8 @@ export default function Home() {
   const [activeTab, setActiveTab] = useState('batting')
   const [activeNav, setActiveNav] = useState('standings')
   const [showChart, setShowChart] = useState(false)
+  const [isModalOpen, setIsModalOpen] = useState(false)
+  const [selectedTeam, setSelectedTeam] = useState('')
 
   const { teams, loading, error, mutate } = useTeams()
   useEffect(() => {
@@ -131,6 +134,10 @@ export default function Home() {
                       {validTeams.map((team) => (
                         <div
                           key={team.id}
+                          onClick={() => {
+                            setSelectedTeam(team.id)
+                            setIsModalOpen(true)
+                          }}
                           className={`
                             grid grid-cols-6 gap-8 py-8 border-b border-neutral-100 
                             items-center cursor-pointer transition-all duration-200
@@ -332,6 +339,10 @@ export default function Home() {
           )}
         </main>
       </div>
+
+      {isModalOpen && (
+        <TeamModal teamId={selectedTeam} isOpen={isModalOpen} onClose={() => setIsModalOpen(false)} />
+      )}
     </div>
   )
 }
