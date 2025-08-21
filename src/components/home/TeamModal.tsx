@@ -55,7 +55,10 @@ export default function TeamModal({ teamId, onClose }: Props) {
             )}
           </div>
 
-          <div className="absolute left-1/2 bottom-0 transform -translate-x-1/2 translate-y-1/2">
+          <div className="absolute w-full grid grid-cols-3 items-center justify-between left-0 bottom-0 transform translate-y-1/2">
+            <div className='flex flex-col items-center'>
+              승률
+            </div>
             <div className="w-30 h-30 bg-white rounded-full shadow-lg flex items-center justify-center border-4 border-white">
               <Image
                 src={`/team-logos/${teamId}.svg`}
@@ -63,8 +66,10 @@ export default function TeamModal({ teamId, onClose }: Props) {
                 width={80}
                 height={80}
                 priority
-                className="rounded-full"
               />
+            </div>
+            <div className='flex flex-col items-center'>
+              승률
             </div>
           </div>
         </div>
