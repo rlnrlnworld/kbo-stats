@@ -44,7 +44,7 @@ export async function GET(request: NextRequest) {
           games_back
         FROM daily_team_rankings 
         WHERE date >= (
-          SELECT MAX(date) - INTERVAL '${days} days' 
+          SELECT MAX(date) - INTERVAL '1 day' * ${days}
           FROM daily_team_rankings
         )
         ORDER BY date ASC, rank ASC;
