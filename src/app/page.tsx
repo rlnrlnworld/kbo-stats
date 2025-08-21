@@ -30,6 +30,14 @@ export default function Home() {
     console.log(teams)
   }, [teams])
 
+  useEffect(() => {
+    const teamIds = ['kia', 'samsung', 'lg', 'kt', 'kiwoom', 'nc', 'lotte', 'ssg', 'doosan', 'hanwha']
+    teamIds.forEach(id => {
+      const img = new Image()
+      img.src = `/team-logos/${id}.svg`
+    })
+  }, [])
+
   const validTeams = teams?.slice(0, 10)
 
   const handleRefresh = () => {
