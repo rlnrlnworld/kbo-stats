@@ -45,11 +45,11 @@ export default function TeamModal({ teamId, onClose }: Props) {
           </button>
           
           <div className="text-center text-white mb-6">
-            <h2 className="text-2xl font-light tracking-wide mb-2">
+            <h2 className="text-2xl tracking-wide mb-2">
               {teamName}
             </h2>
             {!isLoading && team && (
-              <div className="text-4xl font-light tracking-wider opacity-90">
+              <div className="text-4xl tracking-wider opacity-90">
                 현재 {team.rank}위
               </div>
             )}
