@@ -100,7 +100,7 @@ export default function TeamRankingChart() {
       <div className="flex justify-between items-center mb-6">
         <div>
           <h3 className="text-lg font-medium text-neutral-900 mb-1 flex items-center">
-            <BarChart3 className="h-5 w-5 mr-2 text-blue-600" />
+
             순위 변동 추이
           </h3>
           <div className="flex items-center gap-4 text-sm text-neutral-600">
@@ -111,13 +111,12 @@ export default function TeamRankingChart() {
             {summary.totalRecords > 0 && (
               <div className="flex items-center">
                 <TrendingUp className="h-4 w-4 mr-1" />
-                {summary.uniqueDates}일간 데이터
+                {period}일간 데이터
               </div>
             )}
           </div>
         </div>
         
-        {/* Period Selector */}
         <div className="flex gap-1 bg-neutral-100 rounded-lg p-1">
           {['7', '14', '30'].map((p) => (
             <button
@@ -207,14 +206,13 @@ export default function TeamRankingChart() {
               />
               <YAxis 
                 domain={[1, 10]}
-                reversed={true} // 1위가 위에 오도록
+                reversed={true}
                 axisLine={false}
                 tickLine={false}
                 tick={{ fontSize: 12, fill: '#666' }}
                 tickFormatter={(value) => `${value}위`}
               />
               
-              {/* 순위 구분선 */}
               <ReferenceLine y={5.5} stroke="#e5e5e5" strokeDasharray="2 2" />
               
               <Tooltip content={<CustomTooltip />} />
@@ -236,26 +234,16 @@ export default function TeamRankingChart() {
         )}
       </div>
 
-      {/* Legend & Info */}
       <div className="mt-4 flex justify-between items-center text-xs text-neutral-500">
         <div>
           * 클릭해서 팀을 선택/해제할 수 있습니다
         </div>
-        {hasData && (
-          <div className="flex items-center gap-4">
-            <span>📊 총 {summary.totalRecords}개 레코드</span>
-            <span>📅 {summary.uniqueDates}일간 데이터</span>
-            <span>⚾ {summary.uniqueTeams}개 팀</span>
+        {!isLoading && hasData && (
+          <div className="mt-3 text-center text-xs text-gray-400">
+            마지막 업데이트: {new Date().toLocaleTimeString('ko-KR')}
           </div>
         )}
       </div>
-
-      {/* 데이터 새로고침 시간 */}
-      {!isLoading && hasData && (
-        <div className="mt-3 text-center text-xs text-gray-400">
-          마지막 업데이트: {new Date().toLocaleTimeString('ko-KR')}
-        </div>
-      )}
     </div>
   )
 }

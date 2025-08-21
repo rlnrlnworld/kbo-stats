@@ -66,7 +66,7 @@ export function useRankingHistory(days: number = 30, startDate?: string, endDate
     refresh: mutate,
     
     hasData: (data?.chartData?.length || 0) > 0,
-    dateRange: data?.period ? `${data.period.actualStart} ~ ${data.period.actualEnd}` : '',
+    dateRange: data?.period ? `${data.period.actualStart?.split("T")[0]} ~ ${data.period.actualEnd?.split("T")[0]}` : '',
   };
 }
 
