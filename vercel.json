@@ -1,0 +1,8 @@
+{
+  "crons": [
+    {
+      "path": "/api/cron/daily-kbo-scrape",
+      "schedule": "0 23 * * *"
+    }
+  ]
+}
