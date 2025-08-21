@@ -61,7 +61,7 @@ export default function TeamModal({ teamId, onClose }: Props) {
           <div className="absolute w-full grid grid-cols-3 items-end justify-between left-0 bottom-0 transform translate-y-1/2 px-8">
             <div className="flex flex-col items-center backdrop-blur-md bg-white/10 rounded-2xl p-4 border border-white/20">
               <div className="text-2xl font-light text-white mb-1">
-                {team?.win_rate ? team.win_rate.toFixed(3) : '0.000'}
+                {team?.win_rate }
               </div>
               <div className="text-xs text-white/70 uppercase tracking-wider font-medium">
                 승률
