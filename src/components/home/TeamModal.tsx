@@ -45,18 +45,20 @@ export default function TeamModal({ teamId, onClose }: Props) {
           </button>
           
           <div className="text-center text-white mb-6">
-            <h2 className="text-2xl tracking-wide mb-2">
-              {teamName}
-            </h2>
             {!isLoading && team && (
               <div className="text-4xl tracking-wider opacity-90">
                 현재 {team.rank}위
               </div>
             )}
+            {!isLoading && team && (
+              <div className="text-base font-normal mb-2">
+                {team.wins}승 {team.losses}패 {team.ties}무
+              </div>
+            )}
           </div>
 
           <div className="absolute w-full grid grid-cols-3 items-center justify-between left-0 bottom-0 transform translate-y-1/2">
-            <div className='flex flex-col items-center'>
+            <div className='flex flex-col gap-3 items-center'>
               <div className="text-2xl font-normal text-white">
                 {team?.win_rate}
               </div>
@@ -73,7 +75,7 @@ export default function TeamModal({ teamId, onClose }: Props) {
                 priority
               />
             </div>
-            <div className='flex flex-col items-center'>
+            <div className='flex flex-col gap-3 items-center'>
               <div className="text-2xl font-normal text-white">
                 {team?.games_back === 0 ? '-' : team?.games_back}
               </div>
@@ -108,12 +110,9 @@ export default function TeamModal({ teamId, onClose }: Props) {
           ) : team ? (
             <div>
               <div className="text-center mb-8">
-                <div className="text-lg font-normal text-neutral-900 mb-2">
-                  {team.wins}승 {team.losses}패 {team.ties}무
-                </div>
-                <div className="text-sm text-neutral-500">
-                  {new Date().getFullYear()} 정규시즌 기록
-                </div>
+                <h2 className="text-2xl tracking-wide mb-2">
+                  {teamName}
+                </h2>
               </div>
   
               <div className="border-t border-neutral-100 pt-6">
