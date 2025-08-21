@@ -1,11 +1,12 @@
+// src/app/api/rankings/team/[teamId]/route.ts
 import { NextRequest, NextResponse } from 'next/server';
 import { sql } from '@vercel/postgres';
 
 export async function GET(
   request: NextRequest,
-  { params }: { params: { teamId: string } }
+  { params }: { params: Promise<{ teamId: string }> }
 ) {
-  const { teamId } = params;
+  const { teamId } = await params;
 
   try {
     console.log(`=== 팀 현재 데이터 조회: ${teamId} ===`);
@@ -42,6 +43,8 @@ export async function GET(
     
     const totalGames = teamData.wins + teamData.losses + teamData.ties;
     const winPercentage = totalGames > 0 ? (teamData.wins / totalGames * 100).toFixed(1) : '0.0';
+
+    console.log(`✅ ${teamId} 팀 데이터 조회 완료: ${teamData.rank}위`);
 
     return NextResponse.json({
       success: true,
