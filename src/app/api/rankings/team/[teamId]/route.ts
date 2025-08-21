@@ -1,16 +1,37 @@
-// src/app/api/rankings/team/[teamId]/route.ts
 import { NextRequest, NextResponse } from 'next/server';
 import { sql } from '@vercel/postgres';
+
+const TEAM_ID_MAPPING: Record<string, string> = {
+  kia: 'KIA',
+  samsung: 'SS', 
+  lg: 'LG',
+  kt: 'KT',
+  kiwoom: 'KW',
+  nc: 'NC',
+  lotte: 'LT',
+  ssg: 'SSG',
+  doosan: 'DU',
+  hanwha: 'HH',
+};
 
 export async function GET(
   request: NextRequest,
   { params }: { params: Promise<{ teamId: string }> }
 ) {
   const { teamId } = await params;
+  const dbTeamId = TEAM_ID_MAPPING[teamId.toLowerCase()];
 
   try {
-    console.log(`=== 팀 현재 데이터 조회: ${teamId} ===`);
+    console.log(`=== 팀 현재 데이터 조회: ${teamId} -> ${dbTeamId} ===`);
 
+    if (!dbTeamId) {
+      return NextResponse.json({
+        success: false,
+        error: `지원하지 않는 팀 ID입니다: ${teamId}`
+      }, { status: 400 });
+    }
+
+    // 가장 최근 날짜의 해당 팀 데이터 조회
     const result = await sql`
       SELECT 
         date,
@@ -24,18 +45,18 @@ export async function GET(
         games_back,
         created_at
       FROM daily_team_rankings 
-      WHERE team_id = ${teamId}
+      WHERE team_id = ${dbTeamId}
         AND date = (
           SELECT MAX(date) 
           FROM daily_team_rankings 
-          WHERE team_id = ${teamId}
+          WHERE team_id = ${dbTeamId}
         );
     `;
 
     if (result.rows.length === 0) {
       return NextResponse.json({
         success: false,
-        error: `${teamId} 팀의 데이터를 찾을 수 없습니다.`
+        error: `${teamId} 팀의 데이터를 찾을 수 없습니다. (DB ID: ${dbTeamId})`
       }, { status: 404 });
     }
 
@@ -44,12 +65,12 @@ export async function GET(
     const totalGames = teamData.wins + teamData.losses + teamData.ties;
     const winPercentage = totalGames > 0 ? (teamData.wins / totalGames * 100).toFixed(1) : '0.0';
 
-    console.log(`✅ ${teamId} 팀 데이터 조회 완료: ${teamData.rank}위`);
 
     return NextResponse.json({
       success: true,
       team: {
         ...teamData,
+        ui_team_id: teamId,
         total_games: totalGames,
         win_percentage: winPercentage,
         record_text: `${teamData.wins}승 ${teamData.losses}패 ${teamData.ties}무`,

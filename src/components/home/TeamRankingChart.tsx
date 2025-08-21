@@ -4,7 +4,7 @@
 import { useRankingHistory } from '@/hooks/useRankingHistory'
 import React, { useEffect, useState } from 'react'
 import { LineChart, Line, XAxis, YAxis, CartesianGrid, ResponsiveContainer, Tooltip, ReferenceLine } from 'recharts'
-import { Calendar, TrendingUp, BarChart3, RefreshCw } from 'lucide-react'
+import { Calendar, RefreshCw } from 'lucide-react'
 
 const teamColors = {
   'KIA': '#ea0029',
