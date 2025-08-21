@@ -147,18 +147,18 @@ export default function TeamModal({ teamId, onClose }: Props) {
             </div>
           ) : team ? (
             <div>
-              <div className="text-center mb-8">
+              <div className="text-center mb-4">
                 {isLoading ? (
-                  <div className='h-8 w-20 bg-neutral-200 animate-pulse rounded-md mx-auto'></div>
+                  <div className='h-9 w-20 bg-neutral-200 animate-pulse rounded-md mx-auto'></div>
                 ): (
-                  <h2 className="text-2xl font-semibold tracking-wide text-neutral-900 mb-1">
+                  <h2 className="text-4xl font-semibold tracking-wide text-neutral-900 mb-1">
                     {teamName}
                   </h2>
                 )}
               </div>
 
               {teamInfo && (
-                <div className="flex items-center justify-center space-x-6 text-xs text-neutral-400 mb-8 ">
+                <div className="flex items-center justify-center space-x-6 text-xs text-neutral-400 mb-4">
                   <div className="flex items-center space-x-1">
                     <MapPin className="w-3 h-3" strokeWidth={1.5} />
                     <span>{teamInfo.location}</span>
@@ -176,7 +176,7 @@ export default function TeamModal({ teamId, onClose }: Props) {
                 </div>
               )}
 
-              <div className="space-y-6 mb-8 max-h-40 overflow-y-auto scrollbar-hide">
+              <div className="space-y-6 mb-8 max-h-50 overflow-y-auto scrollbar-hide">
                 <div className="border border-neutral-100 rounded-2xl p-6 bg-neutral-25">
                   <div className="flex items-center space-x-2 mb-4">
                     <Clock className="w-4 h-4 text-neutral-500" strokeWidth={1.5} />
@@ -244,7 +244,7 @@ export default function TeamModal({ teamId, onClose }: Props) {
 
                   <div className="border border-neutral-100 rounded-2xl p-4 bg-neutral-25">
                     <div className="text-sm  text-neutral-700 mb-2">현재 기록</div> 
-                    <div className={additionalData.streak.type === 'W' ? 'text-lg  text-green-600' : 'text-lg  text-red-600'}>
+                    <div className={team.current_streak.type === 'W' ? 'text-lg  text-green-600' : 'text-lg  text-red-600'}>
                       {team.current_streak.count}{team.current_streak.type === 'W' ? '연승' : '연패'}
                     </div>
                   </div>
