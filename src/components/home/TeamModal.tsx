@@ -57,9 +57,14 @@ export default function TeamModal({ teamId, onClose }: Props) {
 
           <div className="absolute w-full grid grid-cols-3 items-center justify-between left-0 bottom-0 transform translate-y-1/2">
             <div className='flex flex-col items-center'>
-              승률
+              <div className="text-2xl font-normal text-white">
+                {team?.win_rate}
+              </div>
+              <div className="text-xs text-neutral-400 uppercase tracking-wider mb-2">
+                승률
+              </div>
             </div>
-            <div className="w-30 h-30 bg-white rounded-full shadow-lg flex items-center justify-center border-4 border-white">
+            <div className="w-30 h-30 mx-auto bg-white rounded-full shadow-lg flex items-center justify-center border-4 border-white">
               <Image
                 src={`/team-logos/${teamId}.svg`}
                 alt={`${teamName} 로고`}
@@ -69,7 +74,12 @@ export default function TeamModal({ teamId, onClose }: Props) {
               />
             </div>
             <div className='flex flex-col items-center'>
-              승률
+              <div className="text-2xl font-normal text-white">
+                {team?.games_back === 0 ? '-' : team?.games_back}
+              </div>
+              <div className="text-xs text-neutral-400 uppercase tracking-wider mb-2">
+                게임차
+              </div>
             </div>
           </div>
         </div>
@@ -105,27 +115,7 @@ export default function TeamModal({ teamId, onClose }: Props) {
                   2024 정규시즌 기록
                 </div>
               </div>
-              
-              <div className="grid grid-cols-2 gap-6 mb-8">
-                <div className="text-center">
-                  <div className="text-xs text-neutral-400 uppercase tracking-wider mb-2">
-                    승률
-                  </div>
-                  <div className="text-2xl font-mono font-normal text-neutral-900">
-                    {team.win_rate}
-                  </div>
-                </div>
-                
-                <div className="text-center">
-                  <div className="text-xs text-neutral-400 uppercase tracking-wider mb-2">
-                    게임차
-                  </div>
-                  <div className="text-2xl font-mono font-normal text-neutral-900">
-                    {team.games_back === 0 ? '-' : team.games_back}
-                  </div>
-                </div>
-              </div>
-              
+  
               <div className="border-t border-neutral-100 pt-6">
                 <div className="text-center">
                   <div className="text-xs text-neutral-400 mb-2">
