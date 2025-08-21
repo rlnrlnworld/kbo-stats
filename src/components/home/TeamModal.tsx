@@ -243,7 +243,7 @@ export default function TeamModal({ teamId, onClose }: Props) {
                   </div>
 
                   <div className="border border-neutral-100 rounded-2xl p-4 bg-neutral-25">
-                    <div className="text-sm  text-neutral-700 mb-2">현재 기록</div>
+                    <div className="text-sm  text-neutral-700 mb-2">현재 기록</div> 
                     <div className={additionalData.streak.type === 'W' ? 'text-lg  text-green-600' : 'text-lg  text-red-600'}>
                       {team.current_streak.count}{team.current_streak.type === 'W' ? '연승' : '연패'}
                     </div>
