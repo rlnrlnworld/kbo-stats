@@ -39,20 +39,25 @@ export default function TeamModal({ teamId, onClose }: Props) {
         <div className={`${color} px-8 pt-8 pb-20 relative`}>
           <button 
             onClick={onClose}
-            className="absolute top-6 right-6 text-white/80 hover:text-white p-2 rounded-full hover:bg-white/10 transition-all duration-200"
+            className="absolute z-90 cursor-pointer top-6 right-6 text-white/80 hover:text-white p-2 rounded-full hover:bg-white/10 transition-all duration-200"
           >
             <X strokeWidth={1.5} size={20} />
           </button>
           
           <div className="text-center text-white mb-6">
-            {!isLoading && team && (
-              <div className="text-4xl tracking-wider opacity-90">
-                현재 {team.rank}위
+            {isLoading ? (
+              <div className='flex flex-col items-center'>
+                <div className='h-10 w-50 rounded-md bg-white/50 animate-pulse'></div>
+                <div className='h-6 w-50 mb-2 rounded-md bg-white/50 animate-pulse'></div>
               </div>
-            )}
-            {!isLoading && team && (
-              <div className="text-base font-normal mb-2">
-                {team.wins}승 {team.losses}패 {team.ties}무
+            ): (
+              <div className='flex flex-col items-center'>
+                <div className="text-4xl tracking-wider">
+                  현재 {team?.rank}위
+                </div>
+                <div className="text-base mb-2">
+                  {team?.wins}승 {team?.losses}패 {team?.ties}무
+                </div>
               </div>
             )}
           </div>
@@ -60,7 +65,11 @@ export default function TeamModal({ teamId, onClose }: Props) {
           <div className="absolute w-full grid grid-cols-3 items-center justify-between left-0 bottom-0 transform translate-y-1/2">
             <div className='flex flex-col gap-3 items-center'>
               <div className="text-2xl font-normal text-white">
-                {team?.win_rate}
+                {isLoading ? (
+                  <div className='h-8 w-10 rounded-md bg-white/50 animate-pulse'></div>
+                ) : (
+                  <span>{team?.win_rate}</span>
+                )}
               </div>
               <div className="text-xs text-neutral-400 uppercase tracking-wider mb-2">
                 승률
@@ -77,7 +86,13 @@ export default function TeamModal({ teamId, onClose }: Props) {
             </div>
             <div className='flex flex-col gap-3 items-center'>
               <div className="text-2xl font-normal text-white">
-                {team?.games_back === 0 ? '-' : team?.games_back}
+                {isLoading ? (
+                  <div className='h-8 w-10 rounded-md bg-white/50 animate-pulse'></div>
+                ) : (
+                  <span>
+                    {team?.games_back === 0 ? '-' : team?.games_back}
+                  </span>
+                )}
               </div>
               <div className="text-xs text-neutral-400 uppercase tracking-wider mb-2">
                 게임차
