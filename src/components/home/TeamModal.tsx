@@ -54,18 +54,18 @@ export default function TeamModal({ teamId, onClose }: Props) {
               </div>
             )}
           </div>
-        </div>
-        
-        <div className="absolute left-1/2 transform -translate-x-1/2 -translate-y-1/2" style={{ top: '60%' }}>
-          <div className="w-24 h-24 bg-white rounded-full shadow-lg flex items-center justify-center border-4 border-white">
-            <Image
-              src={`/team-logos/${teamId}.svg`}
-              alt={`${teamName} 로고`}
-              width={64}
-              height={64}
-              priority
-              className="rounded-full"
-            />
+
+          <div className="absolute left-1/2 bottom-0 transform -translate-x-1/2 translate-y-1/2">
+            <div className="w-24 h-24 bg-white rounded-full shadow-lg flex items-center justify-center border-4 border-white">
+              <Image
+                src={`/team-logos/${teamId}.svg`}
+                alt={`${teamName} 로고`}
+                width={64}
+                height={64}
+                priority
+                className="rounded-full"
+              />
+            </div>
           </div>
         </div>
         
@@ -107,7 +107,7 @@ export default function TeamModal({ teamId, onClose }: Props) {
                     승률
                   </div>
                   <div className="text-2xl font-mono font-normal text-neutral-900">
-                    {team.win_rate.toFixed(3)}
+                    {team.win_rate}
                   </div>
                 </div>
                 
