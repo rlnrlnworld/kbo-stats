@@ -1,4 +1,5 @@
 import { TEAM_INFO, TEAM_NAMES } from '@/constants/teamData'
+import { useNextGame } from '@/hooks/useNextGame'
 import { useTeamData } from '@/hooks/useTeamData'
 import { useTeamStats } from '@/hooks/useTeamStats'
 import { TEAM_COLORS } from '@/types/team'
@@ -28,10 +29,12 @@ export default function TeamModal({ teamId, onClose }: Props) {
   const teamName = TEAM_NAMES[teamId] || teamId
   const teamInfo = TEAM_INFO[teamId]
   const additionalData = getMockAdditionalData(teamId)
+  const { nextGame } = useNextGame(teamId)
 
   useEffect(() => {
     console.log(team)
-  }, [team])
+    console.log(nextGame)
+  }, [team, nextGame])
 
   return (
     <div className="fixed inset-0 bg-black/20 backdrop-blur-sm z-50 flex items-center justify-center p-8">
