@@ -1,3 +1,4 @@
+// src/app/api/cron/daily-team-stats/route.ts
 import { NextResponse } from 'next/server';
 
 interface ApiResult {
@@ -11,12 +12,34 @@ interface ApiResult {
 }
 
 interface IntegratedResult {
+  rankings: ApiResult;
   batting: ApiResult;
   pitching: ApiResult;
   fielding: ApiResult;
   baserunning: ApiResult;
 }
 
+async function executeRankingsCron(): Promise<ApiResult> {
+  try {
+    console.log('🔄 순위 크롤링 시작...');
+    
+    const { POST } = await import('../daily-kbo-scrape/route');
+    const response = await POST();
+    const result = await response.json();
+    
+    console.log('✅ 순위 크롤링 완료');
+    return result;
+    
+  } catch (error) {
+    console.error('❌ 순위 크롤링 실패:', error);
+    return {
+      success: false,
+      message: '순위 크롤링 실패',
+      error: error instanceof Error ? error.message : String(error),
+      timestamp: new Date().toISOString()
+    };
+  }
+}
 
 async function executeBattingCron(): Promise<ApiResult> {
   try {
@@ -108,12 +131,13 @@ async function executeBaserunningCron(): Promise<ApiResult> {
 
 export async function POST() {
   try {
-    console.log('🚀 === 통합 KBO 팀 기록 크롤링 크론잡 시작 ===');
+    console.log('🚀 === 통합 KBO 전체 데이터 크롤링 크론잡 시작 ===');
     console.log('⏰ 시간:', new Date().toISOString());
 
     const startTime = Date.now();
 
     const results: IntegratedResult = {
+      rankings: await executeRankingsCron(),
       batting: await executeBattingCron(),
       pitching: await executePitchingCron(),  
       fielding: await executeFieldingCron(),
@@ -137,8 +161,8 @@ export async function POST() {
       .map(([key, result]) => ({ api: key, error: result.error }));
 
     console.log('📊 === 통합 크롤링 결과 집계 ===');
-    console.log(`✅ 성공: ${totalSuccess}/4개 API`);
-    console.log(`❌ 실패: ${totalFailed}/4개 API`);
+    console.log(`✅ 성공: ${totalSuccess}/5개 API`);
+    console.log(`❌ 실패: ${totalFailed}/5개 API`);
     console.log(`📈 총 크롤링: ${totalScraped}개 팀 데이터`);
     console.log(`💾 총 저장: ${totalSaved}개 레코드`);
     console.log(`⏱️ 실행 시간: ${executionTime}초`);
@@ -154,17 +178,17 @@ export async function POST() {
       });
     }
 
-    console.log('🏁 === 통합 팀 기록 크론잡 완료 ===');
+    console.log('🏁 === 통합 KBO 전체 데이터 크론잡 완료 ===');
 
     const overallSuccess = totalSuccess > 0;
 
     return NextResponse.json({
       success: overallSuccess,
       message: totalFailed === 0 
-        ? '모든 팀 기록 크롤링 완료' 
+        ? '모든 KBO 데이터 크롤링 완료' 
         : `부분 성공: ${totalSuccess}개 성공, ${totalFailed}개 실패`,
       summary: {
-        totalApis: 4,
+        totalApis: 5,
         successfulApis: totalSuccess,
         failedApis: totalFailed,
         totalScrapedTeams: totalScraped,
@@ -192,6 +216,6 @@ export async function POST() {
 }
 
 export async function GET() {
-  console.log('🧪 수동 통합 팀 기록 크롤링 테스트 실행');
+  console.log('🧪 수동 통합 KBO 전체 데이터 크롤링 테스트 실행');
   return POST();
 }

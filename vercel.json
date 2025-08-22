@@ -1,12 +1,8 @@
 {
   "crons": [
     {
-      "path": "/api/cron/daily-kbo-scrape",
-      "schedule": "0 23 * * *"
-    },
-    {
       "path": "/api/cron/daily-all-stats",
-      "schedule": "5 23 * * *"
+      "schedule": "0 23 * * *"
     }
   ]
 }
