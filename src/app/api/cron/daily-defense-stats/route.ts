@@ -116,7 +116,7 @@ async function scrapeFieldingStats(): Promise<DefenseStats[] | null> {
   }
 }
 
-async function saveFieldingStats(stats: FieldingStats[]): Promise<void> {
+async function saveFieldingStats(stats: DefenseStats[]): Promise<void> {
   try {
     console.log(`💾 수비 기록 데이터 저장 시작... (${stats.length}개 팀)`);
 
