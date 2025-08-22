@@ -86,10 +86,10 @@ interface TeamStats {
 
 export async function GET(
   request: NextRequest,
-  { params }: { params: { teamId: string } }
+  { params }: { params: Promise<{ teamId: string }> }
 ) {
   try {
-    const { teamId: rawTeamId } = params;
+    const { teamId: rawTeamId } = await params;
 
     if (!rawTeamId) {
       return NextResponse.json(
