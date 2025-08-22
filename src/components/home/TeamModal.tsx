@@ -177,16 +177,16 @@ export default function TeamModal({ teamId, onClose }: Props) {
                     </div>
                     <div className="flex flex-col gap-3">
                       <div className="text-center grid grid-cols-2 gap-2">
-                        <div className="text-xs text-neutral-400 ">팀 타율</div>
-                        <div className="text-lg  text-neutral-900 font-mono">{teamStats?.batting?.avg}</div>
+                        <div className="text-xs flex items-center justify-center text-neutral-400 ">팀 타율</div>
+                        <div className="text-lg flex items-center justify-center text-neutral-900 font-mono">{teamStats?.batting?.avg}</div>
                       </div>
                       <div className="text-center grid grid-cols-2 gap-2">
-                        <div className="text-xs text-neutral-400 ">팀 평균자책점</div>
-                        <div className="text-lg  text-neutral-900 font-mono">{teamStats?.pitching?.era}</div>
+                        <div className="text-xs flex items-center justify-center text-neutral-400 ">팀 평균자책점</div>
+                        <div className="text-lg flex items-center justify-center  text-neutral-900 font-mono">{teamStats?.pitching?.era}</div>
                       </div>
                       <div className="text-center grid grid-cols-2 gap-2">
-                        <div className="text-xs text-neutral-400 ">팀 홈런</div>
-                        <div className="text-lg  text-neutral-900 font-mono">{teamStats?.batting?.hr}</div>
+                        <div className="text-xs flex items-center justify-center text-neutral-400 ">팀 홈런</div>
+                        <div className="text-lg flex items-center justify-center text-neutral-900 font-mono">{teamStats?.batting?.hr}</div>
                       </div>
                     </div>
                   </div>
@@ -217,7 +217,7 @@ export default function TeamModal({ teamId, onClose }: Props) {
                       {team.current_streak.type === 'W' 
                         ? team.current_streak.count > 1 ? '연승' : "승" 
                         : team.current_streak.type === 'L'
-                        ? team.current_streak.count > 1 ? "패" : '연패'
+                        ? team.current_streak.count > 1 ? "연패" : '패'
                         : '무'}
                     </div>
                   </div>
