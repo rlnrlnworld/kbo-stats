@@ -176,17 +176,17 @@ export default function TeamModal({ teamId, onClose }: Props) {
                       <span className="text-sm  text-neutral-700">시즌 주요 기록</span>
                     </div>
                     <div className="flex flex-col gap-3">
-                      <div className="text-center">
-                        <div className="text-lg  text-neutral-900 font-mono">{teamStats?.batting?.avg}</div>
+                      <div className="text-center flex items-center gap-2">
                         <div className="text-xs text-neutral-400 ">팀 타율</div>
+                        <div className="text-lg  text-neutral-900 font-mono">{teamStats?.batting?.avg}</div>
                       </div>
-                      <div className="text-center">
-                        <div className="text-lg  text-neutral-900 font-mono">{teamStats?.pitching?.era}</div>
+                      <div className="text-center flex items-center gap-2">
                         <div className="text-xs text-neutral-400 ">팀 평균자책점</div>
+                        <div className="text-lg  text-neutral-900 font-mono">{teamStats?.pitching?.era}</div>
                       </div>
-                      <div className="text-center">
-                        <div className="text-lg  text-neutral-900 font-mono">{teamStats?.batting?.hr}</div>
+                      <div className="text-center flex items-center gap-2">
                         <div className="text-xs text-neutral-400 ">팀 홈런</div>
+                        <div className="text-lg  text-neutral-900 font-mono">{teamStats?.batting?.hr}</div>
                       </div>
                     </div>
                   </div>
@@ -213,7 +213,12 @@ export default function TeamModal({ teamId, onClose }: Props) {
                   <div className="border border-neutral-100 rounded-2xl p-4 bg-neutral-25">
                     <div className="text-sm  text-neutral-700 mb-2">현재 기록</div> 
                     <div className={team.current_streak.type === 'W' ? 'text-lg  text-green-600' : 'text-lg  text-red-600'}>
-                      {team.current_streak.count}{team.current_streak.type === 'W' ? '연승' : '연패'}
+                      {team.current_streak.count}
+                      {team.current_streak.type === 'W' 
+                        ? team.current_streak.count > 1 ? '연승' : "승" 
+                        : team.current_streak.type === 'L'
+                        ? team.current_streak.count > 1 ? "패" : '연패'
+                        : '무'}
                     </div>
                   </div>
                 </div>
