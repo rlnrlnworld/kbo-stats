@@ -18,14 +18,14 @@ export interface TeamInfo {
 }
 
 export const TEAM_INFO: Record<string, TeamInfo> = {
-  kia: { location: '광주', championships: 11, founded: 1982 },
+  kia: { location: '광주', championships: 12, founded: 1982 },
   samsung: { location: '대구', championships: 8, founded: 1982 },
-  lg: { location: '서울', championships: 2, founded: 1982 },
-  kt: { location: '수원', championships: 0, founded: 2013 },
+  lg: { location: '서울', championships: 3, founded: 1982 },
+  kt: { location: '수원', championships: 1, founded: 2013 },
   kiwoom: { location: '서울', championships: 0, founded: 2008 },
-  nc: { location: '창원', championships: 0, founded: 2013 },
+  nc: { location: '창원', championships: 1, founded: 2011 },
   lotte: { location: '부산', championships: 2, founded: 1982 },
-  ssg: { location: '인천', championships: 1, founded: 2000 },
+  ssg: { location: '인천', championships: 5, founded: 2000 },
   doosan: { location: '서울', championships: 6, founded: 1982 },
   hanwha: { location: '대전', championships: 1, founded: 1986 },
 }
