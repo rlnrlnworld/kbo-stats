@@ -71,7 +71,7 @@ export async function GET(
       FROM daily_team_rankings 
       WHERE team_id = ${dbTeamId}
       ORDER BY date DESC 
-      LIMIT 30;
+      LIMIT 6;
     `;
 
     let recentForm: string[] = [];
@@ -96,56 +96,63 @@ export async function GET(
         }
       }
       
-      if (recentForm.length > 0) {
-        let lastGameResult = '';
-        let streakCount = 0;
+      recentForm = recentForm.slice(-5);
+    }
+
+    const streakDataResult = await sql`
+      SELECT 
+        date,
+        wins,
+        losses,
+        ties
+      FROM daily_team_rankings 
+      WHERE team_id = ${dbTeamId}
+      ORDER BY date DESC 
+      LIMIT 50;
+    `;
+
+    if (streakDataResult.rows.length >= 2) {
+      const streakData = streakDataResult.rows.reverse();
+      let streakCount = 0;
+      let streakType: 'W' | 'L' | null = null;
+      
+      for (let i = streakData.length - 1; i > 0; i--) {
+        const prev = streakData[i - 1];
+        const curr = streakData[i];
         
-        for (let i = recentForm.length - 1; i >= 0; i--) {
-          if (recentForm[i] !== 'T') {
-            lastGameResult = recentForm[i];
+        const winsChanged = curr.wins - prev.wins;
+        const lossesChanged = curr.losses - prev.losses;
+        const tiesChanged = curr.ties - prev.ties;
+        
+        if (tiesChanged > 0) {
+          continue;
+        }
+        
+        let gameResult: 'W' | 'L' | null = null;
+        if (winsChanged > 0) {
+          gameResult = 'W';
+        } else if (lossesChanged > 0) {
+          gameResult = 'L';
+        }
+        
+        if (gameResult) {
+          if (streakType === null) {
+            streakType = gameResult;
             streakCount = 1;
+          } else if (streakType === gameResult) {
+            streakCount++;
+          } else {
             break;
           }
         }
-        
-        if (lastGameResult) {
-          const allData = recentDataResult.rows.reverse();
-          
-          for (let i = allData.length - 2; i >= 0; i--) {
-            const prev = allData[i];
-            const curr = allData[i + 1];
-            
-            const winsChanged = curr.wins - prev.wins;
-            const lossesChanged = curr.losses - prev.losses;
-            const tiesChanged = curr.ties - prev.ties;
-            
-            // 무승부인 경우 연승/연패에 영향 없음
-            if (tiesChanged > 0) {
-              continue;
-            }
-            
-            let gameResult = '';
-            if (winsChanged > 0) {
-              gameResult = 'W';
-            } else if (lossesChanged > 0) {
-              gameResult = 'L';
-            }
-            
-            // 연승/연패가 끊어지면 중단
-            if (gameResult !== lastGameResult) {
-              break;
-            }
-            
-            streakCount++;
-          }
-          
-          streak = {
-            type: lastGameResult as 'W' | 'L',
-            count: streakCount
-          };
-        }
       }
-      recentForm = recentForm.slice(-5);
+      
+      if (streakType && streakCount > 0) {
+        streak = {
+          type: streakType,
+          count: streakCount
+        };
+      }
     }
 
     const totalGames = teamData.wins + teamData.losses + teamData.ties;
