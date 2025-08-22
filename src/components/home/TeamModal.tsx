@@ -7,16 +7,6 @@ import { X, MapPin, Trophy, Calendar, Clock, Target, TrendingUp } from 'lucide-r
 import Image from 'next/image'
 import { useEffect } from 'react'
 
-// 목업 추가 데이터 (실제로는 API에서 가져와야 함)
-const getMockAdditionalData = (teamId: string) => ({
-  nextGame: {
-    date: '2024-10-20',
-    opponent: teamId === 'kia' ? 'samsung' : 'kia',
-    time: '14:00',
-    isHome: Math.random() > 0.5
-  },
-})
-
 type Props = {
   teamId: string
   onClose: () => void
@@ -28,7 +18,6 @@ export default function TeamModal({ teamId, onClose }: Props) {
   const { teamStats } = useTeamStats(teamId)
   const teamName = TEAM_NAMES[teamId] || teamId
   const teamInfo = TEAM_INFO[teamId]
-  const additionalData = getMockAdditionalData(teamId)
   const { nextGame } = useNextGame(teamId)
 
   useEffect(() => {
@@ -152,23 +141,23 @@ export default function TeamModal({ teamId, onClose }: Props) {
                       <Clock className="w-4 h-4 text-neutral-500" strokeWidth={1.5} />
                       <span className="text-sm  text-neutral-700">다음 경기</span>
                     </div>
-                    <div className="flex items-center justify-between">
-                      <div className="flex items-center space-x-3">
+                    <div className="flex flex-col items-end">
+                      <div className="flex items-center justify-between">
                         <div className="text-lg  text-neutral-900">
-                          vs {TEAM_NAMES[additionalData.nextGame.opponent] || '상대팀'}
+                          vs <strong>{TEAM_NAMES[nextGame?.opponent ?? ""] || '상대팀'}</strong>
                         </div>
-                        <span className={additionalData.nextGame.isHome ? 'px-3 py-1 rounded-full text-xs  bg-blue-50 text-blue-600 border border-blue-100' : 'px-3 py-1 rounded-full text-xs  bg-red-50 text-red-600 border border-red-100'}>
-                          {additionalData.nextGame.isHome ? '홈' : '원정'}
+                        <span className={nextGame?.is_home_game ? 'px-3 py-1 rounded-full text-xs  bg-blue-50 text-blue-600 border border-blue-100' : 'px-3 py-1 rounded-full text-xs  bg-red-50 text-red-600 border border-red-100'}>
+                          {nextGame?.is_home_game ? '홈' : '원정'}
                         </span>
                       </div>
                       <div className="text-right">
                         <div className="text-sm  text-neutral-900">
-                          {new Date(additionalData.nextGame.date).toLocaleDateString('ko-KR', { 
+                          {new Date(nextGame?.date ?? new Date()).toLocaleDateString('ko-KR', { 
                             month: 'short', 
                             day: 'numeric' 
                           })}
                         </div>
-                        <div className="text-xs text-neutral-400 ">{additionalData.nextGame.time}</div>
+                        <div className="text-xs text-neutral-400 ">{nextGame?.game_time}</div>
                       </div>
                     </div>
                   </div>
