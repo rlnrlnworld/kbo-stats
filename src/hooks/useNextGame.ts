@@ -1,5 +1,5 @@
 import useSWR from 'swr';
-import type { GameSchedule, GameStatus } from '@/types/game';
+import type { GameSchedule } from '@/types/game';
 
 interface NextGameData extends GameSchedule {
   opponent: string;

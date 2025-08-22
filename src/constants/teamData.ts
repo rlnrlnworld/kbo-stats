@@ -42,6 +42,18 @@ export const TEAM_ID_MAPPING: Record<string, string> = {
   doosan: 'DU',
   hanwha: 'HH',
 }
+export const DB_TO_ID_MAPPING: Record<string, string> = {
+  'KIA': 'kia',
+  'SS': 'samsung',
+  'LG': 'lg',
+  'KT': 'kt',
+  'KW': 'kiwoom',
+  'NC': 'nc',
+  'LT': 'lotte',
+  'SSG': 'ssg',
+  'DU': 'doosan',
+  'HH': 'hanwha',
+}
 
 export const getTeamName = (teamId: string): string => {
   return TEAM_NAMES[teamId] || teamId
@@ -53,4 +65,8 @@ export const getTeamInfo = (teamId: string): TeamInfo | undefined => {
 
 export const getDbTeamId = (teamId: string): string | undefined => {
   return TEAM_ID_MAPPING[teamId.toLowerCase()]
+}
+
+export const getTeamIdFromDB = (dbTeamId: string): string => {
+  return DB_TO_ID_MAPPING[dbTeamId.toUpperCase()] ?? ""
 }

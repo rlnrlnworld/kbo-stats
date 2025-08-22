@@ -4,7 +4,7 @@ import { NextRequest, NextResponse } from 'next/server';
 import { sql } from '@vercel/postgres';
 
 import type { GameSchedule, GameStatus } from '@/types/game';
-import { TEAM_ID_MAPPING } from '@/constants/teamData';
+import { getTeamIdFromDB, TEAM_ID_MAPPING } from '@/constants/teamData';
 
 interface NextGameData extends GameSchedule {
   opponent: string;
@@ -117,13 +117,13 @@ export async function GET(
 
     const gameRow = nextGameResult.rows[0];
     const isHomeGame = gameRow.home_team === dbTeamId;
-    const opponent = isHomeGame ? gameRow.away_team : gameRow.home_team;
+    const opponent = isHomeGame ? getTeamIdFromDB(gameRow.away_team) : getTeamIdFromDB(gameRow.home_team);
 
     const nextGame: NextGameData = {
       id: gameRow.id,
       date: gameRow.date.toISOString().split('T')[0],
-      home_team: gameRow.home_team,
-      away_team: gameRow.away_team,
+      home_team: getTeamIdFromDB(gameRow.home_team),
+      away_team: getTeamIdFromDB(gameRow.away_team),
       stadium: gameRow.stadium || '미정',
       game_time: gameRow.game_time || '18:30:00',
       status: validateGameStatus(gameRow.status),

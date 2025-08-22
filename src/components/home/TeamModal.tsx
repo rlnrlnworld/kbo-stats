@@ -141,9 +141,9 @@ export default function TeamModal({ teamId, onClose }: Props) {
                       <Clock className="w-4 h-4 text-neutral-500" strokeWidth={1.5} />
                       <span className="text-sm  text-neutral-700">다음 경기</span>
                     </div>
-                    <div className="flex flex-col items-end">
-                      <div className="flex items-center justify-between">
-                        <div className="text-lg  text-neutral-900">
+                    <div className="flex items-center justify-between">
+                      <div className="flex flex-col items-start space-x-3">
+                        <div className="text-xl  text-neutral-900">
                           vs <strong>{TEAM_NAMES[nextGame?.opponent ?? ""] || '상대팀'}</strong>
                         </div>
                         <span className={nextGame?.is_home_game ? 'px-3 py-1 rounded-full text-xs  bg-blue-50 text-blue-600 border border-blue-100' : 'px-3 py-1 rounded-full text-xs  bg-red-50 text-red-600 border border-red-100'}>
