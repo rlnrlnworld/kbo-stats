@@ -60,7 +60,7 @@ export async function GET(
     }
 
     const teamData = currentDataResult.rows[0];
-    
+        
     const recentDataResult = await sql`
       SELECT 
         date,
@@ -71,12 +71,11 @@ export async function GET(
       FROM daily_team_rankings 
       WHERE team_id = ${dbTeamId}
       ORDER BY date DESC 
-      LIMIT 6;
+      LIMIT 30;
     `;
 
     let recentForm: string[] = [];
-    // eslint-disable-next-line prefer-const
-    let streak = { type: 'W', count: 0 };
+    let streak = { type: 'W' as 'W' | 'L', count: 0 };
 
     if (recentDataResult.rows.length >= 2) {
       const recentData = recentDataResult.rows.reverse();
@@ -98,19 +97,54 @@ export async function GET(
       }
       
       if (recentForm.length > 0) {
-        const lastResult = recentForm[recentForm.length - 1];
-        streak.type = lastResult as 'W' | 'L';
-        streak.count = 1;
+        let lastGameResult = '';
+        let streakCount = 0;
         
-        for (let i = recentForm.length - 2; i >= 0; i--) {
-          if (recentForm[i] === lastResult) {
-            streak.count++;
-          } else {
+        for (let i = recentForm.length - 1; i >= 0; i--) {
+          if (recentForm[i] !== 'T') {
+            lastGameResult = recentForm[i];
+            streakCount = 1;
             break;
           }
         }
+        
+        if (lastGameResult) {
+          const allData = recentDataResult.rows.reverse();
+          
+          for (let i = allData.length - 2; i >= 0; i--) {
+            const prev = allData[i];
+            const curr = allData[i + 1];
+            
+            const winsChanged = curr.wins - prev.wins;
+            const lossesChanged = curr.losses - prev.losses;
+            const tiesChanged = curr.ties - prev.ties;
+            
+            // 무승부인 경우 연승/연패에 영향 없음
+            if (tiesChanged > 0) {
+              continue;
+            }
+            
+            let gameResult = '';
+            if (winsChanged > 0) {
+              gameResult = 'W';
+            } else if (lossesChanged > 0) {
+              gameResult = 'L';
+            }
+            
+            // 연승/연패가 끊어지면 중단
+            if (gameResult !== lastGameResult) {
+              break;
+            }
+            
+            streakCount++;
+          }
+          
+          streak = {
+            type: lastGameResult as 'W' | 'L',
+            count: streakCount
+          };
+        }
       }
-      
       recentForm = recentForm.slice(-5);
     }
 
@@ -147,7 +181,7 @@ export async function GET(
 
 function getRankSuffix(rank: number): string {
   if (rank === 1) return '1st';
-  if (rank === 2) return '2nd';  
+  if (rank === 2) return '2nd'; 
   if (rank === 3) return '3rd';
   return `${rank}th`;
 }

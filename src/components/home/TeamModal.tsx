@@ -176,15 +176,15 @@ export default function TeamModal({ teamId, onClose }: Props) {
                       <span className="text-sm  text-neutral-700">시즌 주요 기록</span>
                     </div>
                     <div className="flex flex-col gap-3">
-                      <div className="text-center flex items-center gap-2">
+                      <div className="text-center grid grid-cols-2 gap-2">
                         <div className="text-xs text-neutral-400 ">팀 타율</div>
                         <div className="text-lg  text-neutral-900 font-mono">{teamStats?.batting?.avg}</div>
                       </div>
-                      <div className="text-center flex items-center gap-2">
+                      <div className="text-center grid grid-cols-2 gap-2">
                         <div className="text-xs text-neutral-400 ">팀 평균자책점</div>
                         <div className="text-lg  text-neutral-900 font-mono">{teamStats?.pitching?.era}</div>
                       </div>
-                      <div className="text-center flex items-center gap-2">
+                      <div className="text-center grid grid-cols-2 gap-2">
                         <div className="text-xs text-neutral-400 ">팀 홈런</div>
                         <div className="text-lg  text-neutral-900 font-mono">{teamStats?.batting?.hr}</div>
                       </div>
@@ -202,7 +202,7 @@ export default function TeamModal({ teamId, onClose }: Props) {
                       {team.recent_form.map((result, index) => (
                         <div 
                           key={index} 
-                          className={result === 'W' ? 'w-6 h-6 rounded-full flex items-center justify-center text-xs  bg-green-50 text-green-600 border border-green-100' : 'w-6 h-6 rounded-full flex items-center justify-center text-xs  bg-red-50 text-red-600 border border-red-100'}
+                          className={result === 'W' ? 'w-6 h-6 rounded-full flex items-center justify-center text-xs  bg-green-50 text-green-600 border border-green-100' : result === 'L' ? 'w-6 h-6 rounded-full flex items-center justify-center text-xs  bg-red-50 text-red-600 border border-red-100' : 'w-6 h-6 rounded-full flex items-center justify-center text-xs  bg-neutral-50 text-neutral-600 border border-neutral-100'}
                         >
                           {result}
                         </div>
@@ -212,7 +212,7 @@ export default function TeamModal({ teamId, onClose }: Props) {
 
                   <div className="border border-neutral-100 rounded-2xl p-4 bg-neutral-25">
                     <div className="text-sm  text-neutral-700 mb-2">현재 기록</div> 
-                    <div className={team.current_streak.type === 'W' ? 'text-lg  text-green-600' : 'text-lg  text-red-600'}>
+                    <div className={team.current_streak.type === 'W' ? 'text-lg  text-green-600' : team.current_streak.type === 'L' ? 'text-lg  text-red-600' : 'text-lg  text-neutral-600'}>
                       {team.current_streak.count}
                       {team.current_streak.type === 'W' 
                         ? team.current_streak.count > 1 ? '연승' : "승" 
