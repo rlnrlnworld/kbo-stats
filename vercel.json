@@ -3,6 +3,10 @@
     {
       "path": "/api/cron/daily-kbo-scrape",
       "schedule": "0 23 * * *"
+    },
+    {
+      "path": "/api/cron/daily-batting-stats",
+      "schedule": "5 23 * * *"
     }
   ]
 }
