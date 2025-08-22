@@ -1,4 +1,3 @@
-// src/app/api/cron/daily-team-stats/route.ts
 import { NextResponse } from 'next/server';
 
 interface ApiResult {
@@ -18,42 +17,89 @@ interface IntegratedResult {
   baserunning: ApiResult;
 }
 
-async function callAPI(path: string, description: string): Promise<ApiResult> {
+
+async function executeBattingCron(): Promise<ApiResult> {
   try {
-    console.log(`🔄 ${description} 시작...`);
+    console.log('🔄 타자 기록 크롤링 시작...');
     
-    const baseUrl = process.env.VERCEL_URL 
-      ? `https://${process.env.VERCEL_URL}` 
-      : 'http://localhost:3000';
+    const { POST } = await import('../daily-batting-stats/route');
+    const response = await POST();
+    const result = await response.json();
     
-    const response = await fetch(`${baseUrl}${path}`, {
-      method: 'POST',
-      headers: {
-        'Content-Type': 'application/json',
-        'User-Agent': 'KBO-Integrated-Cron/1.0'
-      }
-    });
-
-    if (!response.ok) {
-      throw new Error(`HTTP ${response.status}: ${response.statusText}`);
-    }
-
-    const result: ApiResult = await response.json();
-    
-    if (result.success) {
-      console.log(`✅ ${description} 성공: ${result.scrapedTeams || 0}개 팀 크롤링`);
-    } else {
-      console.log(`❌ ${description} 실패: ${result.error}`);
-    }
-    
+    console.log('✅ 타자 기록 크롤링 완료');
     return result;
-
-  } catch (error) {
-    console.error(`❌ ${description} 호출 실패:`, error);
     
+  } catch (error) {
+    console.error('❌ 타자 기록 크롤링 실패:', error);
     return {
       success: false,
-      message: `${description} 호출 실패`,
+      message: '타자 기록 크롤링 실패',
+      error: error instanceof Error ? error.message : String(error),
+      timestamp: new Date().toISOString()
+    };
+  }
+}
+
+async function executePitchingCron(): Promise<ApiResult> {
+  try {
+    console.log('🔄 투수 기록 크롤링 시작...');
+    
+    const { POST } = await import('../daily-pitching-stats/route');
+    const response = await POST();
+    const result = await response.json();
+    
+    console.log('✅ 투수 기록 크롤링 완료');
+    return result;
+    
+  } catch (error) {
+    console.error('❌ 투수 기록 크롤링 실패:', error);
+    return {
+      success: false,
+      message: '투수 기록 크롤링 실패',
+      error: error instanceof Error ? error.message : String(error),
+      timestamp: new Date().toISOString()
+    };
+  }
+}
+
+async function executeFieldingCron(): Promise<ApiResult> {
+  try {
+    console.log('🔄 수비 기록 크롤링 시작...');
+    
+    const { POST } = await import('../daily-defense-stats/route');
+    const response = await POST();
+    const result = await response.json();
+    
+    console.log('✅ 수비 기록 크롤링 완료');
+    return result;
+    
+  } catch (error) {
+    console.error('❌ 수비 기록 크롤링 실패:', error);
+    return {
+      success: false,
+      message: '수비 기록 크롤링 실패',
+      error: error instanceof Error ? error.message : String(error),
+      timestamp: new Date().toISOString()
+    };
+  }
+}
+
+async function executeBaserunningCron(): Promise<ApiResult> {
+  try {
+    console.log('🔄 주루 기록 크롤링 시작...');
+    
+    const { POST } = await import('../daily-baserunning-stats/route');
+    const response = await POST();
+    const result = await response.json();
+    
+    console.log('✅ 주루 기록 크롤링 완료');
+    return result;
+    
+  } catch (error) {
+    console.error('❌ 주루 기록 크롤링 실패:', error);
+    return {
+      success: false,
+      message: '주루 기록 크롤링 실패',
       error: error instanceof Error ? error.message : String(error),
       timestamp: new Date().toISOString()
     };
@@ -68,10 +114,10 @@ export async function POST() {
     const startTime = Date.now();
 
     const results: IntegratedResult = {
-      batting: await callAPI('/api/cron/daily-batting-stats', '타자 기록 크롤링'),
-      pitching: await callAPI('/api/cron/daily-pitching-stats', '투수 기록 크롤링'),  
-      fielding: await callAPI('/api/cron/daily-defense-stats', '수비 기록 크롤링'),
-      baserunning: await callAPI('/api/cron/daily-baserunning-stats', '주루 기록 크롤링')
+      batting: await executeBattingCron(),
+      pitching: await executePitchingCron(),  
+      fielding: await executeFieldingCron(),
+      baserunning: await executeBaserunningCron()
     };
 
     const endTime = Date.now();
