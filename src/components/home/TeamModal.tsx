@@ -25,6 +25,21 @@ export default function TeamModal({ teamId, onClose }: Props) {
     console.log(nextGame)
   }, [team, nextGame])
 
+  const formatGameTime = (gameTime:  string): string => {
+    if (gameTime === "") return gameTime
+    // eslint-disable-next-line @typescript-eslint/no-unused-vars
+    const [hh, mm, ss] = gameTime?.split(":")
+
+    let meridiem = ''
+    if (Number(hh) > 12) {
+      meridiem = "오후"
+    } else {
+      meridiem = "오전"
+    }
+
+    return `${meridiem} ${Number(hh) > 12 ? Number(hh) - 12 : hh}시 ${mm}분`
+  }
+
   return (
     <div className="fixed inset-0 bg-black/20 backdrop-blur-sm z-50 flex items-center justify-center p-8">
       <div className="absolute inset-0" onClick={onClose} />
@@ -142,12 +157,12 @@ export default function TeamModal({ teamId, onClose }: Props) {
                       <span className="text-sm  text-neutral-700">다음 경기</span>
                     </div>
                     <div>
-                      <div className="flex items-center gap-2 space-x-3">
+                      <div className="flex items-center space-x-3">
                         <div className="text-xl  text-neutral-900">
                           vs <strong>{TEAM_NAMES[nextGame?.opponent ?? ""] || '상대팀'}</strong>
                         </div>
                         { nextGame?.is_home_game && (
-                          <div className='flex items-center justify-center text-base w-8 h-8 rounded-full bg-neutral-600 text-white'>
+                          <div className='flex items-center justify-center text-sm w-6 h-6 rounded-full bg-neutral-400 text-white'>
                             홈
                           </div>
                         )}
@@ -159,7 +174,7 @@ export default function TeamModal({ teamId, onClose }: Props) {
                             day: 'numeric' 
                           })}
                         </div>
-                        <div className="text-xs text-neutral-400 ">{nextGame?.game_time}</div>
+                        <div className="text-xs text-neutral-400 ">{formatGameTime(nextGame?.game_time ?? "")}</div>
                         <div className="text-xs text-neutral-400 ">{nextGame?.stadium}</div>
                       </div>
                     </div>
