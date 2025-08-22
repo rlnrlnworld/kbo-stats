@@ -141,16 +141,18 @@ export default function TeamModal({ teamId, onClose }: Props) {
                       <Clock className="w-4 h-4 text-neutral-500" strokeWidth={1.5} />
                       <span className="text-sm  text-neutral-700">다음 경기</span>
                     </div>
-                    <div className="flex items-center justify-between">
-                      <div className="flex flex-col items-start space-x-3">
+                    <div>
+                      <div className="flex items-center gap-2 space-x-3">
                         <div className="text-xl  text-neutral-900">
                           vs <strong>{TEAM_NAMES[nextGame?.opponent ?? ""] || '상대팀'}</strong>
                         </div>
-                        <span className={nextGame?.is_home_game ? 'px-3 py-1 rounded-full text-xs  bg-blue-50 text-blue-600 border border-blue-100' : 'px-3 py-1 rounded-full text-xs  bg-red-50 text-red-600 border border-red-100'}>
-                          {nextGame?.is_home_game ? '홈' : '원정'}
-                        </span>
+                        { nextGame?.is_home_game && (
+                          <div className='flex items-center justify-center text-base w-8 h-8 rounded-full bg-neutral-600 text-white'>
+                            홈
+                          </div>
+                        )}
                       </div>
-                      <div className="text-right">
+                      <div className="flex flex-col items-end gap-3 text-right">
                         <div className="text-sm  text-neutral-900">
                           {new Date(nextGame?.date ?? new Date()).toLocaleDateString('ko-KR', { 
                             month: 'short', 
@@ -158,6 +160,7 @@ export default function TeamModal({ teamId, onClose }: Props) {
                           })}
                         </div>
                         <div className="text-xs text-neutral-400 ">{nextGame?.game_time}</div>
+                        <div className="text-xs text-neutral-400 ">{nextGame?.stadium}</div>
                       </div>
                     </div>
                   </div>
@@ -170,15 +173,27 @@ export default function TeamModal({ teamId, onClose }: Props) {
                     <div className="flex flex-col gap-3">
                       <div className="text-center grid grid-cols-2 gap-2">
                         <div className="text-xs flex items-center justify-center text-neutral-400 ">팀 타율</div>
-                        <div className="text-lg flex items-center justify-center text-neutral-900 font-mono">{teamStats?.batting?.avg}</div>
+                        <div className="text-lg flex items-center justify-center text-neutral-900 font-mono">
+                          <span className='w-30 text-right'>
+                            {teamStats?.batting?.avg}
+                          </span>
+                        </div>
                       </div>
                       <div className="text-center grid grid-cols-2 gap-2">
                         <div className="text-xs flex items-center justify-center text-neutral-400 ">팀 평균자책점</div>
-                        <div className="text-lg flex items-center justify-center  text-neutral-900 font-mono">{teamStats?.pitching?.era}</div>
+                        <div className="text-lg flex items-center justify-center  text-neutral-900 font-mono">
+                          <span className='w-30 text-right'>
+                            {teamStats?.pitching?.era}
+                          </span>
+                        </div>
                       </div>
                       <div className="text-center grid grid-cols-2 gap-2">
                         <div className="text-xs flex items-center justify-center text-neutral-400 ">팀 홈런</div>
-                        <div className="text-lg flex items-center justify-center text-neutral-900 font-mono">{teamStats?.batting?.hr}</div>
+                        <div className="text-lg flex items-center justify-center text-neutral-900 font-mono">
+                          <span className='w-30 text-right'>
+                            {teamStats?.batting?.hr}
+                          </span>
+                        </div>
                       </div>
                     </div>
                   </div>
