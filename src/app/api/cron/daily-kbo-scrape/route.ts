@@ -2,19 +2,7 @@
 import { NextResponse } from 'next/server';
 import { sql } from '@vercel/postgres';
 import * as cheerio from 'cheerio';
-
-const TEAM_MAPPING: { [key: string]: string } = {
-  'LG': 'LG',
-  'KIA': 'KIA', 
-  'SSG': 'SSG',
-  '두산': 'DU',
-  'KT': 'KT',
-  '롯데': 'LT',
-  '삼성': 'SS',
-  'NC': 'NC',
-  '한화': 'HH',
-  '키움': 'KW'
-};
+import { TEAM_MAPPING } from '@/types/team';
 
 interface TeamRanking {
   teamId: string;

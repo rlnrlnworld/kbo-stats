@@ -67,6 +67,40 @@ export interface BattingStats {
   sf: number;         // 희생플라이 (SF)
 }
 
+export interface PitchingStats {
+  teamId: string;
+  teamName: string;
+  era: number;        // 평균자책점
+  g: number;          // 경기수
+  w: number;          // 승
+  l: number;          // 패
+  sv: number;         // 세이브
+  hld: number;        // 홀드
+  wpct: number;       // 승률
+  ip: number;         // 이닝 (소수점 처리)
+  h: number;          // 피안타
+  hr: number;         // 피홈런
+  bb: number;         // 볼넷
+  hbp: number;        // 몸에 맞는 볼
+  so: number;         // 탈삼진
+  r: number;          // 실점
+  er: number;         // 자책점
+  whip: number;       // WHIP
+}
+
+export const TEAM_MAPPING: { [key: string]: string } = {
+  'LG': 'LG',
+  'KIA': 'KIA', 
+  'SSG': 'SSG',
+  '두산': 'DU',
+  'KT': 'KT',
+  '롯데': 'LT',
+  '삼성': 'SS',
+  'NC': 'NC',
+  '한화': 'HH',
+  '키움': 'KW'
+}
+
 export interface RankingChart {
   teams: TeamRankHistory[]
   dateRange: {
