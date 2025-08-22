@@ -1,5 +1,6 @@
 import { TEAM_INFO, TEAM_NAMES } from '@/constants/teamData'
 import { useTeamData } from '@/hooks/useTeamData'
+import { useTeamStats } from '@/hooks/useTeamStats'
 import { TEAM_COLORS } from '@/types/team'
 import { X, MapPin, Trophy, Calendar, Clock, Target, TrendingUp } from 'lucide-react'
 import Image from 'next/image'
@@ -13,11 +14,6 @@ const getMockAdditionalData = (teamId: string) => ({
     time: '14:00',
     isHome: Math.random() > 0.5
   },
-  teamStats: {
-    avg: 0.284,
-    era: 4.12,
-    homeRuns: 187
-  },
 })
 
 type Props = {
@@ -28,6 +24,7 @@ type Props = {
 export default function TeamModal({ teamId, onClose }: Props) {
   const color = TEAM_COLORS[teamId]
   const { team, isLoading, error } = useTeamData(teamId)
+  const { teamStats } = useTeamStats(teamId)
   const teamName = TEAM_NAMES[teamId] || teamId
   const teamInfo = TEAM_INFO[teamId]
   const additionalData = getMockAdditionalData(teamId)
@@ -179,15 +176,15 @@ export default function TeamModal({ teamId, onClose }: Props) {
                   </div>
                   <div className="grid grid-cols-3 gap-6">
                     <div className="text-center">
-                      <div className="text-lg  text-neutral-900 font-mono">{additionalData.teamStats.avg.toFixed(3)}</div>
+                      <div className="text-lg  text-neutral-900 font-mono">{teamStats?.batting?.avg}</div>
                       <div className="text-xs text-neutral-400 ">팀 타율</div>
                     </div>
                     <div className="text-center">
-                      <div className="text-lg  text-neutral-900 font-mono">{additionalData.teamStats.era.toFixed(2)}</div>
+                      <div className="text-lg  text-neutral-900 font-mono">{teamStats?.pitching?.era}</div>
                       <div className="text-xs text-neutral-400 ">팀 평균자책점</div>
                     </div>
                     <div className="text-center">
-                      <div className="text-lg  text-neutral-900 font-mono">{additionalData.teamStats.homeRuns}</div>
+                      <div className="text-lg  text-neutral-900 font-mono">{teamStats?.batting?.hr}</div>
                       <div className="text-xs text-neutral-400 ">팀 홈런</div>
                     </div>
                   </div>

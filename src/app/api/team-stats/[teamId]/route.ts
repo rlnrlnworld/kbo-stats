@@ -1,6 +1,7 @@
 // src/app/api/team-stats/[teamId]/route.ts
 import { NextRequest, NextResponse } from 'next/server';
 import { sql } from '@vercel/postgres';
+import { TEAM_ID_MAPPING } from '@/constants/teamData';
 
 interface BattingStats {
   team_id: string;
@@ -88,25 +89,37 @@ export async function GET(
   { params }: { params: { teamId: string } }
 ) {
   try {
-    const { teamId } = params;
+    const { teamId: rawTeamId } = params;
 
-    if (!teamId) {
+    if (!rawTeamId) {
       return NextResponse.json(
         { error: '팀 ID가 필요합니다' },
         { status: 400 }
       );
     }
 
-    console.log(`📊 팀 기록 조회 요청: ${teamId}`);
+    const dbTeamId = TEAM_ID_MAPPING[rawTeamId.toLowerCase()];
+
+    if (!dbTeamId) {
+      return NextResponse.json(
+        { 
+          error: '유효하지 않은 팀 ID입니다',
+          teamId: rawTeamId 
+        },
+        { status: 400 }
+      );
+    }
+
+    console.log(`📊 팀 기록 조회 요청: ${rawTeamId} → ${dbTeamId}`);
 
     const [battingResult, pitchingResult, fieldingResult, baserunningResult] = await Promise.allSettled([
-      sql`SELECT * FROM batting_stats WHERE team_id = ${teamId}`,
+      sql`SELECT * FROM batting_stats WHERE team_id = ${dbTeamId}`,
       
-      sql`SELECT * FROM pitching_stats WHERE team_id = ${teamId}`,
+      sql`SELECT * FROM pitching_stats WHERE team_id = ${dbTeamId}`,
       
-      sql`SELECT * FROM fielding_stats WHERE team_id = ${teamId}`,
+      sql`SELECT * FROM fielding_stats WHERE team_id = ${dbTeamId}`,
       
-      sql`SELECT * FROM baserunning_stats WHERE team_id = ${teamId}`
+      sql`SELECT * FROM baserunning_stats WHERE team_id = ${dbTeamId}`
     ]);
 
     const batting = battingResult.status === 'fulfilled' && battingResult.value.rows.length > 0
@@ -125,7 +138,7 @@ export async function GET(
       ? baserunningResult.value.rows[0] as BaserunningStats
       : null;
 
-    const teamName = batting?.team_name || pitching?.team_name || fielding?.team_name || baserunning?.team_name || teamId;
+    const teamName = batting?.team_name || pitching?.team_name || fielding?.team_name || baserunning?.team_name || rawTeamId;
 
     const updateTimes = [
       batting?.updated_at,
@@ -139,7 +152,7 @@ export async function GET(
       : new Date().toISOString();
 
     const teamStats: TeamStats = {
-      teamId,
+      teamId: rawTeamId,
       teamName,
       batting,
       pitching,
@@ -152,13 +165,13 @@ export async function GET(
       return NextResponse.json(
         { 
           error: '해당 팀의 기록을 찾을 수 없습니다',
-          teamId 
+          teamId: rawTeamId
         },
         { status: 404 }
       );
     }
 
-    console.log(`✅ 팀 기록 조회 완료: ${teamName} (${teamId})`);
+    console.log(`✅ 팀 기록 조회 완료: ${teamName} (${rawTeamId} → ${dbTeamId})`);
 
     return NextResponse.json({
       success: true,
