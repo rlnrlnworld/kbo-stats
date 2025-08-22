@@ -37,7 +37,7 @@ export default function TeamModal({ teamId, onClose }: Props) {
     <div className="fixed inset-0 bg-black/20 backdrop-blur-sm z-50 flex items-center justify-center p-8">
       <div className="absolute inset-0" onClick={onClose} />
       
-      <div className="relative bg-white rounded-3xl shadow-xl max-w-lg w-full mx-4 overflow-hidden border border-neutral-100">
+      <div className="relative bg-white rounded-3xl shadow-xl max-w-2xl w-full mx-4 overflow-hidden border border-neutral-100">
         <div className={`${color} px-8 pt-8 pb-20 relative`}>
           <button 
             onClick={onClose}
@@ -143,49 +143,51 @@ export default function TeamModal({ teamId, onClose }: Props) {
               )}
 
               <div className="space-y-6 mb-8 max-h-50 overflow-y-auto scrollbar-hide">
-                <div className="border border-neutral-100 rounded-2xl p-6 bg-neutral-25">
-                  <div className="flex items-center space-x-2 mb-4">
-                    <Clock className="w-4 h-4 text-neutral-500" strokeWidth={1.5} />
-                    <span className="text-sm  text-neutral-700">다음 경기</span>
-                  </div>
-                  <div className="flex items-center justify-between">
-                    <div className="flex items-center space-x-3">
-                      <div className="text-lg  text-neutral-900">
-                        vs {TEAM_NAMES[additionalData.nextGame.opponent] || '상대팀'}
-                      </div>
-                      <span className={additionalData.nextGame.isHome ? 'px-3 py-1 rounded-full text-xs  bg-blue-50 text-blue-600 border border-blue-100' : 'px-3 py-1 rounded-full text-xs  bg-red-50 text-red-600 border border-red-100'}>
-                        {additionalData.nextGame.isHome ? '홈' : '원정'}
-                      </span>
+                <div className='grid grid-cols-2 gap-4'>
+                  <div className="border border-neutral-100 rounded-2xl p-6 bg-neutral-25">
+                    <div className="flex items-center space-x-2 mb-4">
+                      <Clock className="w-4 h-4 text-neutral-500" strokeWidth={1.5} />
+                      <span className="text-sm  text-neutral-700">다음 경기</span>
                     </div>
-                    <div className="text-right">
-                      <div className="text-sm  text-neutral-900">
-                        {new Date(additionalData.nextGame.date).toLocaleDateString('ko-KR', { 
-                          month: 'short', 
-                          day: 'numeric' 
-                        })}
+                    <div className="flex items-center justify-between">
+                      <div className="flex items-center space-x-3">
+                        <div className="text-lg  text-neutral-900">
+                          vs {TEAM_NAMES[additionalData.nextGame.opponent] || '상대팀'}
+                        </div>
+                        <span className={additionalData.nextGame.isHome ? 'px-3 py-1 rounded-full text-xs  bg-blue-50 text-blue-600 border border-blue-100' : 'px-3 py-1 rounded-full text-xs  bg-red-50 text-red-600 border border-red-100'}>
+                          {additionalData.nextGame.isHome ? '홈' : '원정'}
+                        </span>
                       </div>
-                      <div className="text-xs text-neutral-400 ">{additionalData.nextGame.time}</div>
+                      <div className="text-right">
+                        <div className="text-sm  text-neutral-900">
+                          {new Date(additionalData.nextGame.date).toLocaleDateString('ko-KR', { 
+                            month: 'short', 
+                            day: 'numeric' 
+                          })}
+                        </div>
+                        <div className="text-xs text-neutral-400 ">{additionalData.nextGame.time}</div>
+                      </div>
                     </div>
                   </div>
-                </div>
 
-                <div className="border border-neutral-100 rounded-2xl p-6 bg-neutral-25">
-                  <div className="flex items-center space-x-2 mb-4">
-                    <Target className="w-4 h-4 text-neutral-500" strokeWidth={1.5} />
-                    <span className="text-sm  text-neutral-700">시즌 주요 기록</span>
-                  </div>
-                  <div className="grid grid-cols-3 gap-6">
-                    <div className="text-center">
-                      <div className="text-lg  text-neutral-900 font-mono">{teamStats?.batting?.avg}</div>
-                      <div className="text-xs text-neutral-400 ">팀 타율</div>
+                  <div className="border border-neutral-100 rounded-2xl p-6 bg-neutral-25">
+                    <div className="flex items-center space-x-2 mb-4">
+                      <Target className="w-4 h-4 text-neutral-500" strokeWidth={1.5} />
+                      <span className="text-sm  text-neutral-700">시즌 주요 기록</span>
                     </div>
-                    <div className="text-center">
-                      <div className="text-lg  text-neutral-900 font-mono">{teamStats?.pitching?.era}</div>
-                      <div className="text-xs text-neutral-400 ">팀 평균자책점</div>
-                    </div>
-                    <div className="text-center">
-                      <div className="text-lg  text-neutral-900 font-mono">{teamStats?.batting?.hr}</div>
-                      <div className="text-xs text-neutral-400 ">팀 홈런</div>
+                    <div className="flex flex-col gap-3">
+                      <div className="text-center">
+                        <div className="text-lg  text-neutral-900 font-mono">{teamStats?.batting?.avg}</div>
+                        <div className="text-xs text-neutral-400 ">팀 타율</div>
+                      </div>
+                      <div className="text-center">
+                        <div className="text-lg  text-neutral-900 font-mono">{teamStats?.pitching?.era}</div>
+                        <div className="text-xs text-neutral-400 ">팀 평균자책점</div>
+                      </div>
+                      <div className="text-center">
+                        <div className="text-lg  text-neutral-900 font-mono">{teamStats?.batting?.hr}</div>
+                        <div className="text-xs text-neutral-400 ">팀 홈런</div>
+                      </div>
                     </div>
                   </div>
                 </div>
