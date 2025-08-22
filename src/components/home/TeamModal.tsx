@@ -18,11 +18,6 @@ const getMockAdditionalData = (teamId: string) => ({
     era: 4.12,
     homeRuns: 187
   },
-  recentForm: ['W', 'W', 'L', 'W', 'W'], // 최근 5경기
-  streak: {
-    type: Math.random() > 0.5 ? 'W' : 'L',
-    count: Math.floor(Math.random() * 5) + 1
-  }
 })
 
 type Props = {

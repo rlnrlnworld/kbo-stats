@@ -50,6 +50,23 @@ export interface TeamData {
   }
 }
 
+export interface BattingStats {
+  teamId: string;
+  teamName: string;
+  avg: number;        // 타율
+  gp: number;         // 경기수 (GP)
+  ab: number;         // 타수 (AB)
+  r: number;          // 득점 (R)
+  h: number;          // 안타 (H)
+  doubles: number;    // 2루타 (2B)
+  triples: number;    // 3루타 (3B)
+  hr: number;         // 홈런 (HR)
+  tb: number;         // 루타 (TB)
+  rbi: number;        // 타점 (RBI)
+  sac: number;        // 희생번트 (SAC)
+  sf: number;         // 희생플라이 (SF)
+}
+
 export interface RankingChart {
   teams: TeamRankHistory[]
   dateRange: {
