@@ -88,6 +88,34 @@ export interface PitchingStats {
   whip: number;       // WHIP
 }
 
+export interface DefenseStats {
+  teamId: string;
+  teamName: string;
+  g: number;          // 경기수
+  e: number;          // 실책
+  pk: number;         // 견제사 (PKO)
+  po: number;         // 풋아웃
+  a: number;          // 어시스트
+  dp: number;         // 병살
+  fpct: number;       // 수비율
+  pb: number;         // 포일
+  sb: number;         // 도루허용
+  cs: number;         // 도루저지
+  csPct: number;      // 도루저지율
+}
+
+export interface BaserunningStats {
+  teamId: string;
+  teamName: string;
+  g: number;          // 경기수
+  sba: number;        // 도루시도
+  sb: number;         // 도루성공
+  cs: number;         // 도루실패
+  sbPct: number;      // 도루성공률
+  oob: number;        // 주루사 (OOB - Out On Base)
+  pko: number;        // 견제사 (PKO)
+}
+
 export const TEAM_MAPPING: { [key: string]: string } = {
   'LG': 'LG',
   'KIA': 'KIA', 

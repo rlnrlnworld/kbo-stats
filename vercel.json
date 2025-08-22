@@ -5,12 +5,8 @@
       "schedule": "0 23 * * *"
     },
     {
-      "path": "/api/cron/daily-batting-stats",
+      "path": "/api/cron/daily-all-stats",
       "schedule": "5 23 * * *"
-    },
-    {
-      "path": "/api/cron/daily-pitching-stats",
-      "schedule": "8 23 * * *"
     }
   ]
 }
