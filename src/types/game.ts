@@ -10,9 +10,24 @@ export interface Game {
   stadium?: string
 }
 
-export type GameStatus = 'scheduled' | 'live' | 'finished' | 'postponed' | 'cancelled'
-
 export interface Schedule {
   date: string
   games: Game[]
+}
+
+export interface GameSchedule {
+  id: number;
+  date: string;
+  home_team: string;
+  away_team: string;
+  stadium: string;
+  game_time: string;
+  status: GameStatus;
+  created_at: string;
+}
+
+export type GameStatus = 'scheduled' | 'completed' | 'postponed' | 'cancelled';
+
+export interface GamesByDate {
+  [dateKey: string]: GameSchedule[];
 }
