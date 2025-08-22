@@ -3,7 +3,6 @@ import { NextResponse } from 'next/server';
 import { sql } from '@vercel/postgres';
 import * as cheerio from 'cheerio';
 
-// 팀 매핑
 const TEAM_MAPPING: { [key: string]: string } = {
   'LG': 'LG',
   'KIA': 'KIA', 
@@ -67,22 +66,34 @@ async function scrapeCurrentKboRankings(): Promise<{ teams: TeamRanking[], date:
       return null;
     }
 
-    rankingRows.each((index, row) => {
-      const cells = $(row).find('td');
+    const maxTeams = Math.min(rankingRows.length, 10);
+    
+    for (let index = 0; index < maxTeams; index++) {
+      const row = rankingRows.eq(index);
+      const cells = row.find('td');
       
       if (cells.length >= 8) {
         try {
-          const rank = parseInt($(cells[0]).text().trim());
-          const teamName = $(cells[1]).text().trim();
-          // const games = parseInt($(cells[2]).text().trim());
-          const wins = parseInt($(cells[3]).text().trim());
-          const losses = parseInt($(cells[4]).text().trim());
-          const ties = parseInt($(cells[5]).text().trim());
-          const winRate = parseFloat($(cells[6]).text().trim());
-          
-          const gamesBackText = $(cells[7]).text().trim();
+          const rankText = cells.eq(0).text().trim();
+          const teamName = cells.eq(1).text().trim();
+          const winsText = cells.eq(3).text().trim();
+          const lossesText = cells.eq(4).text().trim();
+          const tiesText = cells.eq(5).text().trim();
+          const winRateText = cells.eq(6).text().trim();
+          const gamesBackText = cells.eq(7).text().trim();
+
+          const rank = parseInt(rankText);
+          const wins = parseInt(winsText);
+          const losses = parseInt(lossesText);
+          const ties = parseInt(tiesText);
+          const winRate = parseFloat(winRateText);
+
+          if (isNaN(rank) || isNaN(wins) || isNaN(losses) || isNaN(ties) || isNaN(winRate)) {
+            console.log(`⚠️ ${index + 1}번째 행 데이터 무효 - 건너뛰기: ${teamName}`);
+            continue;
+          }
+
           let gamesBack = 0.0;
-          
           if (gamesBackText && gamesBackText !== '0' && gamesBackText !== '-') {
             const parsed = parseFloat(gamesBackText);
             if (!isNaN(parsed)) {
@@ -91,6 +102,11 @@ async function scrapeCurrentKboRankings(): Promise<{ teams: TeamRanking[], date:
           }
 
           const teamId = TEAM_MAPPING[teamName] || teamName.substring(0, 3).toUpperCase();
+          
+          if (!TEAM_MAPPING[teamName]) {
+            console.log(`⚠️ 알 수 없는 팀명: ${teamName} - 건너뛰기`);
+            continue;
+          }
 
           teams.push({
             teamId,
@@ -107,11 +123,16 @@ async function scrapeCurrentKboRankings(): Promise<{ teams: TeamRanking[], date:
 
         } catch (error) {
           console.error(`⚠️ ${index + 1}번째 행 파싱 실패:`, error);
+          continue;
         }
       }
-    });
+    }
 
-    console.log(`🎉 크롤링 완료: ${teams.length}개 팀`);
+    console.log(`🎉 크롤링 완료: ${teams.length}개 팀 (최대 10개로 제한)`);
+    
+    if (teams.length < 10) {
+      console.log(`⚠️ 예상보다 적은 팀 데이터: ${teams.length}개 (정상적으로는 10개)`);
+    }
     
     return { teams, date: currentDate };
 
@@ -126,6 +147,12 @@ async function saveTodayRankings(teams: TeamRanking[], date: string): Promise<vo
     console.log(`💾 ${date} 순위 데이터 저장 시작... (${teams.length}개 팀)`);
 
     for (const team of teams) {
+      // 저장 전 한 번 더 데이터 검증
+      if (isNaN(team.rank) || isNaN(team.wins) || isNaN(team.losses) || isNaN(team.ties) || isNaN(team.winRate)) {
+        console.error(`⚠️ 유효하지 않은 데이터 발견, 건너뛰기:`, team);
+        continue;
+      }
+
       await sql`
         INSERT INTO daily_team_rankings 
         (date, team_id, team_name, rank, wins, losses, ties, win_rate, games_back)
