@@ -71,7 +71,12 @@ export async function GET(
       }, { status: 400 });
     }
 
-    const today = new Date().toISOString().split('T')[0];
+    const now = new Date();
+    const koreaTime = new Date(now.getTime() + (9 * 60 * 60 * 1000))
+    const today = koreaTime.toISOString().split('T')[0];
+    const currentTime = koreaTime.toTimeString().split(' ')[0]
+
+    console.log(`현재 한국 시간: ${today} ${currentTime}`)
 
     const nextGameResult = await sql<DbNextGameResult>`
       SELECT 
@@ -86,7 +91,10 @@ export async function GET(
         (date - CURRENT_DATE) as days_until
       FROM game_schedule
       WHERE (home_team = ${dbTeamId} OR away_team = ${dbTeamId})
-        AND date >= ${today}
+        AND (
+          date > ${today}
+          OR (date = ${today} AND game_time > ${currentTime})
+        )
         AND status = 'scheduled'
       ORDER BY date ASC, game_time ASC
       LIMIT 1;
@@ -96,7 +104,10 @@ export async function GET(
       SELECT COUNT(*) as upcoming_count
       FROM game_schedule
       WHERE (home_team = ${dbTeamId} OR away_team = ${dbTeamId})
-        AND date >= ${today}
+        AND (
+          date > ${today}
+          OR (date = ${today} AND game_time > ${currentTime})
+        )
         AND status = 'scheduled';
     `;
 
