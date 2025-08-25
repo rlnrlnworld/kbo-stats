@@ -299,9 +299,19 @@ export default function ScheduleCalendar({ selectedDate, onDateSelect }: Schedul
                       {selectedDayGames.map((game, index) => (
                         <div
                           key={game.id}
-                          className={`bg-white rounded-2xl ${index === 0 ? '' : 'border-t border-neutral-200'}`}
+                          className={` rounded-2xl ${index === 0 ? '' : 'border-t border-neutral-200'}`}
                         >
-
+                          <div className="flex items-center justify-center text-xs text-neutral-400 mb-3">
+                            <div className='flex items-center gap-2'>
+                              <Clock size={12} strokeWidth={1} />
+                              <span>{game.game_time}</span>
+                            </div>
+                            <div className='h-4 w-1 border-r border-neutral-300'></div>
+                            <div className='flex items-center gap-2'>
+                              <MapPin size={12} strokeWidth={1} />
+                              <span>{game.stadium?.slice(0,3)}</span>
+                            </div>
+                          </div>
                           <div className="flex items-center mb-6 bg-white">
                             <div className={`flex-1 flex flex-col items-center gap-4 p-4 ${game.status === 'completed' ? 'justify-between' : 'justify-center'}`}>
                               <div className="relative">
@@ -367,18 +377,7 @@ export default function ScheduleCalendar({ selectedDate, onDateSelect }: Schedul
                               )}
                             </div>
                           </div>
-                          
-                          <div className="space-y-4 flex items-center justify-center text-xs text-neutral-400">
-                            <div className='flex items-center gap-2'>
-                              <Clock size={12} strokeWidth={1} />
-                              <span>{game.game_time}</span>
-                            </div>
-                            <div className='h-4 w-1 border-r border-neutral-300'></div>
-                            <div className='flex items-center gap-2'>
-                              <MapPin size={12} strokeWidth={1} />
-                              <span>{game.stadium?.slice(0,3)}</span>
-                            </div>
-                          </div>
+                        
                         </div>
                       ))}
                     </div>
