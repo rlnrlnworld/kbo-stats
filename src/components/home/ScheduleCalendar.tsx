@@ -1,5 +1,6 @@
 "use client"
 
+import { TEAM_NAMES } from '@/constants/teamData'
 import { useCurrentMonthSchedule } from '@/hooks/useMonthlySchedule'
 import { Calendar, Clock, MapPin, ChevronLeft, ChevronRight, Trophy, Users } from 'lucide-react'
 import React, { useState } from 'react'
@@ -256,20 +257,16 @@ export default function ScheduleCalendar({ selectedDate, onDateSelect }: Schedul
                     </div>
                   ) : (
                     <div className="space-y-6">
-                      {selectedDayGames.map((game, index) => (
+                      {selectedDayGames.map(( game ) => (
                         <div
                           key={game.id}
                           className="border-b border-neutral-100 pb-6 last:border-b-0 last:pb-0"
                         >
-                          <div className="text-xs text-neutral-400 uppercase tracking-wider mb-4 font-normal">
-                            {index + 1}경기
-                          </div>
-                          
-                          <div className="mb-6">
+                          <div className="mb-6 flex flex-col items-center">
                             <div className="flex items-center justify-between mb-3">
                               <div className="flex items-center gap-3">
                                 <TeamLogo teamName={game.away_team} />
-                                <span className="font-normal text-neutral-900">{game.away_team}</span>
+                                <span className="font-normal text-neutral-900">{TEAM_NAMES[game.away_team] || game.away_team}</span>
                                 <span className="text-xs text-neutral-500 font-mono">원정</span>
                               </div>
                               {game.away_score !== undefined && game.away_score !== null && (
@@ -284,7 +281,7 @@ export default function ScheduleCalendar({ selectedDate, onDateSelect }: Schedul
                             <div className="flex items-center justify-between mt-3">
                               <div className="flex items-center gap-3">
                                 <TeamLogo teamName={game.home_team} />
-                                <span className="font-normal text-neutral-900">{game.home_team}</span>
+                                <span className="font-normal text-neutral-900">{TEAM_NAMES[game.home_team] || game.home_team}</span>
                                 <span className="text-xs text-neutral-500 font-mono">홈</span>
                               </div>
                               {game.home_score !== undefined && game.home_score !== null && (
