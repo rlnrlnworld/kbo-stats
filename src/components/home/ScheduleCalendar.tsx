@@ -81,26 +81,6 @@ export default function ScheduleCalendar({ selectedDate, onDateSelect }: Schedul
     onDateSelect?.(dateKey)
   }
 
-  const getStatusColor = (status: string) => {
-    switch (status) {
-      case 'completed': return 'bg-emerald-50 text-emerald-700 border-emerald-200'
-      case 'scheduled': return 'bg-blue-50 text-blue-700 border-blue-200'
-      case 'postponed': return 'bg-amber-50 text-amber-700 border-amber-200'
-      case 'cancelled': return 'bg-red-50 text-red-700 border-red-200'
-      default: return 'bg-neutral-50 text-neutral-700 border-neutral-200'
-    }
-  }
-
-  const getStatusText = (status: string) => {
-    switch (status) {
-      case 'completed': return '종료'
-      case 'scheduled': return '예정'
-      case 'postponed': return '연기'
-      case 'cancelled': return '취소'
-      default: return status
-    }
-  }
-
   const getSelectedDateInfo = () => {
     if (!selectedDay) return null
     
@@ -220,9 +200,9 @@ export default function ScheduleCalendar({ selectedDate, onDateSelect }: Schedul
                     onClick={() => handleDayClick(day)}
                     className={`
                       aspect-square p-4 cursor-pointer border-b border-r border-neutral-100 transition-all duration-300
-                      relative group bg-white
+                      relative group
                       ${today ? 'border border-black z-20' : ''}
-                      ${selected ? 'bg-black text-white ' : 'hover:bg-gradient-to-br hover:from-neutral-50 hover:to-neutral-100'}
+                      ${selected ? 'bg-black text-white ' : 'bg-white hover:bg-gradient-to-br hover:from-neutral-50 hover:to-neutral-100'}
                     `}
                   >
                     <div className={`
