@@ -299,8 +299,8 @@ export default function ScheduleCalendar({ selectedDate, onDateSelect }: Schedul
                               <span>{game.stadium?.slice(0,2)}</span>
                             </div>
                           </div>
-                          <div className="flex items-center mb-6 bg-white">
-                            <div className={`flex-1 flex flex-col items-center gap-4 p-4 ${game.status === 'completed' ? 'justify-between' : 'justify-center'}`}>
+                          <div className="flex items-center mb-6">
+                            <div className={`flex-1 hover:bg-neutral-100 cursor-pointer flex flex-col items-center gap-4 p-4 ${game.status === 'completed' ? 'justify-between' : 'justify-center'}`}>
                               <div className="relative">
                                 {game.winner === game.away_team && (
                                   <div 
@@ -344,7 +344,7 @@ export default function ScheduleCalendar({ selectedDate, onDateSelect }: Schedul
                               </div>
                             </div>
                             
-                            <div className={`flex-1 flex flex-col items-center gap-4 p-4 ${game.status === 'completed' ? 'justify-between' : 'justify-center'}`}>
+                            <div className={`flex-1 hover:bg-neutral-100 cursor-pointer flex flex-col items-center gap-4 p-4 ${game.status === 'completed' ? 'justify-between' : 'justify-center'}`}>
                               <div className="relative">
                                 {game.winner === game.home_team && (
                                   <div 
