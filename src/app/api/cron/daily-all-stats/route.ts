@@ -1,4 +1,3 @@
-// src/app/api/cron/daily-team-stats/route.ts
 import { NextResponse } from 'next/server';
 
 interface ApiResult {
@@ -17,6 +16,7 @@ interface IntegratedResult {
   pitching: ApiResult;
   fielding: ApiResult;
   baserunning: ApiResult;
+  gameUpdate: ApiResult
 }
 
 async function executeRankingsCron(): Promise<ApiResult> {
@@ -129,6 +129,28 @@ async function executeBaserunningCron(): Promise<ApiResult> {
   }
 }
 
+async function executeGameUpdateCron(): Promise<ApiResult> {
+  try {
+    console.log('🔄 경기 결과 업데이트 시작...');
+    
+    const { POST } = await import('../daily-game-update/route');
+    const response = await POST();
+    const result = await response.json();
+    
+    console.log('✅ 경기 결과 업데이트 완료');
+    return result;
+    
+  } catch (error) {
+    console.error('❌ 경기 결과 업데이트 실패:', error);
+    return {
+      success: false,
+      message: '경기 결과 업데이트 실패',
+      error: error instanceof Error ? error.message : String(error),
+      timestamp: new Date().toISOString()
+    };
+  }
+}
+
 export async function POST() {
   try {
     console.log('🚀 === 통합 KBO 전체 데이터 크롤링 크론잡 시작 ===');
@@ -141,8 +163,9 @@ export async function POST() {
       batting: await executeBattingCron(),
       pitching: await executePitchingCron(),  
       fielding: await executeFieldingCron(),
-      baserunning: await executeBaserunningCron()
-    };
+      baserunning: await executeBaserunningCron(),
+      gameUpdate: await executeGameUpdateCron()
+    }
 
     const endTime = Date.now();
     const executionTime = Math.round((endTime - startTime) / 1000);
@@ -161,8 +184,8 @@ export async function POST() {
       .map(([key, result]) => ({ api: key, error: result.error }));
 
     console.log('📊 === 통합 크롤링 결과 집계 ===');
-    console.log(`✅ 성공: ${totalSuccess}/5개 API`);
-    console.log(`❌ 실패: ${totalFailed}/5개 API`);
+    console.log(`✅ 성공: ${totalSuccess}/6개 API`);
+    console.log(`❌ 실패: ${totalFailed}/6개 API`)
     console.log(`📈 총 크롤링: ${totalScraped}개 팀 데이터`);
     console.log(`💾 총 저장: ${totalSaved}개 레코드`);
     console.log(`⏱️ 실행 시간: ${executionTime}초`);
@@ -188,7 +211,7 @@ export async function POST() {
         ? '모든 KBO 데이터 크롤링 완료' 
         : `부분 성공: ${totalSuccess}개 성공, ${totalFailed}개 실패`,
       summary: {
-        totalApis: 5,
+        totalApis: 6,
         successfulApis: totalSuccess,
         failedApis: totalFailed,
         totalScrapedTeams: totalScraped,
