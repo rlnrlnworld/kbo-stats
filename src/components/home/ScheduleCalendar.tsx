@@ -301,7 +301,7 @@ export default function ScheduleCalendar({ selectedDate, onDateSelect }: Schedul
                           key={game.id}
                           className={` rounded-2xl ${index === 0 ? '' : 'border-t border-neutral-200'}`}
                         >
-                          <div className="flex items-center justify-center text-xs text-neutral-400 mb-3">
+                          <div className="flex items-center justify-center gap-3 text-xs text-neutral-400 my-3">
                             <div className='flex items-center gap-2'>
                               <Clock size={12} strokeWidth={1} />
                               <span>{game.game_time}</span>
@@ -309,12 +309,19 @@ export default function ScheduleCalendar({ selectedDate, onDateSelect }: Schedul
                             <div className='h-4 w-1 border-r border-neutral-300'></div>
                             <div className='flex items-center gap-2'>
                               <MapPin size={12} strokeWidth={1} />
-                              <span>{game.stadium?.slice(0,3)}</span>
+                              <span>{game.stadium?.slice(0,2)}</span>
                             </div>
                           </div>
                           <div className="flex items-center mb-6 bg-white">
                             <div className={`flex-1 flex flex-col items-center gap-4 p-4 ${game.status === 'completed' ? 'justify-between' : 'justify-center'}`}>
                               <div className="relative">
+                                {game.winner === game.away_team && (
+                                  <div 
+                                    className="absolute -top-1 -left-1 w-5 h-5 rounded-full flex items-center justify-center"
+                                  >
+                                    <span className="text-[10px] text-white font-bold">🏆</span>
+                                  </div>
+                                )}
                                 <TeamLogo teamName={game.away_team} className="w-12 h-12" />
                                 <div 
                                   className="absolute -bottom-1 -right-1 w-5 h-5 rounded-full flex items-center justify-center"
@@ -350,6 +357,13 @@ export default function ScheduleCalendar({ selectedDate, onDateSelect }: Schedul
                             
                             <div className={`flex-1 flex flex-col items-center gap-4 p-4 ${game.status === 'completed' ? 'justify-between' : 'justify-center'}`}>
                               <div className="relative">
+                                {game.winner === game.home_team && (
+                                  <div 
+                                    className="absolute -top-1 -left-1 w-5 h-5 rounded-full flex items-center justify-center"
+                                  >
+                                    <span className="text-[10px] text-white font-bold">🏆</span>
+                                  </div>
+                                )}
                                 <TeamLogo teamName={game.home_team} className="w-12 h-12" />
                                 <div 
                                   className="absolute -bottom-1 -right-1 w-5 h-5 rounded-full flex items-center justify-center"
