@@ -129,6 +129,13 @@ export default function ScheduleCalendar({ selectedDate, onDateSelect }: Schedul
   const selectedDayGames = selectedDay ? getGamesOnDate(selectedDay) : []
   const selectedDateInfo = getSelectedDateInfo()
 
+  const formatTime = (time: string) => {
+    // eslint-disable-next-line @typescript-eslint/no-unused-vars
+    const [hh, mm,ss] = time?.split(":")
+
+    return `${hh}:${mm}`
+  }
+
   if (isLoading) {
     return (
       <div className="text-center py-20 text-neutral-400">
@@ -304,7 +311,7 @@ export default function ScheduleCalendar({ selectedDate, onDateSelect }: Schedul
                           <div className="flex items-center justify-center gap-3 text-xs text-neutral-400 my-3">
                             <div className='flex items-center gap-2'>
                               <Clock size={12} strokeWidth={1} />
-                              <span>{game.game_time}</span>
+                              <span>{formatTime(game.game_time)}</span>
                             </div>
                             <div className='h-4 w-1 border-r border-neutral-300'></div>
                             <div className='flex items-center gap-2'>
