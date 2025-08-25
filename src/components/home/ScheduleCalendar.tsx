@@ -1,68 +1,34 @@
 "use client"
 
 import { useCurrentMonthSchedule } from '@/hooks/useMonthlySchedule'
-import { Calendar, Clock, MapPin, ChevronLeft, ChevronRight, Trophy } from 'lucide-react'
+import { Calendar, Clock, MapPin, ChevronLeft, ChevronRight, Trophy, Users } from 'lucide-react'
 import React, { useState } from 'react'
-import Image from 'next/image'
 
 interface ScheduleCalendarProps {
   selectedDate?: string
   onDateSelect?: (date: string) => void
 }
 
-
 const TeamLogo = ({ teamName, className = "w-6 h-6" }: { teamName: string, className?: string }) => {
-  const [logoSrc, setLogoSrc] = useState<string | null>(null)
-  const [isLoading, setIsLoading] = useState(true)
   const [hasError, setHasError] = useState(false)
+  const logoSrc = `/team-logos/${teamName}.svg`
 
-  React.useEffect(() => {
-    const loadLogo = async () => {
-      try {
-        setIsLoading(true)
-        setHasError(false)
-        
-        const logoModule = await import(`/team-logos/${teamName}.svg`)
-        setLogoSrc(logoModule.default || `/team-logos/${teamName}.svg`)
-      } catch (error) {
-        console.warn(`로고 로드 실패: ${teamName}`, error)
-        setHasError(true)
-        setLogoSrc(`/team-logos/${teamName}.svg`)
-      } finally {
-        setIsLoading(false)
-      }
-    }
-
-    if (teamName) {
-      loadLogo()
-    }
-  }, [teamName])
-
-  if (isLoading) {
+  if (hasError) {
     return (
-      <div className={`rounded-full bg-neutral-200 animate-pulse ${className}`} />
-    )
-  }
-
-  if (logoSrc && !hasError) {
-    return (
-      <Image
-        src={logoSrc}
-        alt={`${teamName} 로고`}
-        width={24}
-        height={24}
-        className={className}
-        onError={() => setHasError(true)}
-      />
+      <div className={`rounded-full bg-neutral-400 flex items-center justify-center text-xs font-bold text-white ${className}`}>
+        {teamName.charAt(0)}
+      </div>
     )
   }
 
   return (
-    <div className={`rounded-full bg-neutral-400 flex items-center justify-center ${className}`}>
-      <span className="text-xs font-bold text-white">
-        {teamName.charAt(0)}
-      </span>
-    </div>
+    <img
+      src={logoSrc}
+      alt={`${teamName} 로고`}
+      className={className}
+      onError={() => setHasError(true)}
+      loading="lazy"
+    />
   )
 }
 
@@ -188,7 +154,7 @@ export default function ScheduleCalendar({ selectedDate, onDateSelect }: Schedul
         <div className="lg:col-span-3">
           <div className="border border-neutral-200 rounded-sm overflow-hidden">
             <div className="grid grid-cols-7 border-b border-neutral-200">
-              {['일', '월', '화', '수', '목', '금', '토'].map((day, index) => (
+              {['일', '월', '화', '수', '목', '금', '토'].map((day) => (
                 <div 
                   key={day} 
                   className="p-4 text-center bg-neutral-50"
