@@ -2,7 +2,7 @@
 
 import { TEAM_NAMES } from '@/constants/teamData'
 import { useCurrentMonthSchedule } from '@/hooks/useMonthlySchedule'
-import { Calendar, Clock, MapPin, ChevronLeft, ChevronRight, Trophy, Users, Star, Activity } from 'lucide-react'
+import { Calendar, Clock, MapPin, ChevronLeft, ChevronRight, Activity } from 'lucide-react'
 import React, { useState } from 'react'
 
 interface ScheduleCalendarProps {
@@ -300,20 +300,22 @@ export default function ScheduleCalendar({ selectedDate, onDateSelect }: Schedul
                       {selectedDayGames.map((game, index) => (
                         <div
                           key={game.id}
-                          className="bg-white rounded-2xl border-b border-neutral-200"
+                          className={`bg-white rounded-2xl ${index === 0 ? '' : 'border-t border-neutral-200'}`}
                         >
 
                           <div className="mb-6 bg-white">
-                            <div className="flex items-center gap-4 p-4">
-                              <div className="relative">
-                                <TeamLogo teamName={game.away_team} className="w-12 h-12" />
-                                <div className="absolute -bottom-1 -right-1 w-5 h-5 bg-neutral-600 rounded-full flex items-center justify-center">
-                                  <span className="text-[10px] text-white font-bold">A</span>
+                            <div className={`flex items-center gap-4 p-4 ${game.status === 'completed' ? 'justify-between' : ''}`}>
+                              <div className='flex items-center gap-2'>
+                                <div className="relative">
+                                  <TeamLogo teamName={game.away_team} className="w-12 h-12" />
+                                  <div className="absolute -bottom-1 -right-1 w-5 h-5 bg-neutral-600 rounded-full flex items-center justify-center">
+                                    <span className="text-[10px] text-white font-bold">A</span>
+                                  </div>
                                 </div>
-                              </div>
-                              <div className="flex-1">
-                                <div className="font-bold text-lg text-neutral-900 mb-1">
-                                  {TEAM_NAMES[game.away_team] || game.away_team}
+                                <div>
+                                  <div className="font-bold text-lg text-neutral-900 mb-1">
+                                    {TEAM_NAMES[game.away_team] || game.away_team}
+                                  </div>
                                 </div>
                               </div>
                               {game.away_score !== undefined && game.away_score !== null && (
