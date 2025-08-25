@@ -42,7 +42,7 @@ export default function Home() {
 
   useEffect(() => {
     console.log('Teams:', teams)
-    console.log('Schedule:', { totalGames, rawGames: rawGames.slice(0, 3) })
+    console.log('Schedule:', { totalGames, rawGames: rawGames.slice(0, 5) })
   }, [teams, totalGames, rawGames])
 
   useEffect(() => {
