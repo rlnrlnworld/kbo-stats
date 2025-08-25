@@ -4,6 +4,7 @@ import { TEAM_NAMES } from '@/constants/teamData'
 import { useCurrentMonthSchedule } from '@/hooks/useMonthlySchedule'
 import { Calendar, Clock, MapPin, ChevronLeft, ChevronRight, Activity, Crown } from 'lucide-react'
 import React, { useState } from 'react'
+import TeamModal from './TeamModal'
 
 interface ScheduleCalendarProps {
   selectedDate?: string
@@ -36,6 +37,8 @@ const TeamLogo = ({ teamName, className = "w-6 h-6" }: { teamName: string, class
 export default function ScheduleCalendar({ selectedDate, onDateSelect }: ScheduleCalendarProps) {
   const [currentDate, setCurrentDate] = useState(new Date())
   const [selectedDay, setSelectedDay] = useState<string | null>(selectedDate || null)
+
+  const [selectedTeam, setSelectedTeam] = useState("")
 
   const year = currentDate.getFullYear()
   const month = currentDate.getMonth() + 1
@@ -300,7 +303,7 @@ export default function ScheduleCalendar({ selectedDate, onDateSelect }: Schedul
                             </div>
                           </div>
                           <div className="flex items-center mb-6">
-                            <div className={`flex-1 hover:bg-neutral-100 cursor-pointer flex flex-col items-center gap-4 p-4 ${game.status === 'completed' ? 'justify-between' : 'justify-center'}`}>
+                            <div onClick={() => setSelectedTeam(game.away_team)} className={`flex-1 rounded-md hover:bg-neutral-100 cursor-pointer flex flex-col items-center gap-4 p-4 ${game.status === 'completed' ? 'justify-between' : 'justify-center'}`}>
                               <div className="relative">
                                 {game.winner === game.away_team && (
                                   <div 
@@ -344,7 +347,7 @@ export default function ScheduleCalendar({ selectedDate, onDateSelect }: Schedul
                               </div>
                             </div>
                             
-                            <div className={`flex-1 hover:bg-neutral-100 cursor-pointer flex flex-col items-center gap-4 p-4 ${game.status === 'completed' ? 'justify-between' : 'justify-center'}`}>
+                            <div onClick={() => setSelectedTeam(game.home_team)} className={`flex-1 rounded-md hover:bg-neutral-100 cursor-pointer flex flex-col items-center gap-4 p-4 ${game.status === 'completed' ? 'justify-between' : 'justify-center'}`}>
                               <div className="relative">
                                 {game.winner === game.home_team && (
                                   <div 
@@ -413,6 +416,10 @@ export default function ScheduleCalendar({ selectedDate, onDateSelect }: Schedul
           </div>
         </div>
       </div>
+
+      {selectedTeam !== "" && (
+        <TeamModal teamId={selectedTeam} onClose={() => setSelectedTeam("")} />
+      )}
     </div>
   )
 }
