@@ -175,8 +175,8 @@ export default function ScheduleCalendar({ selectedDate, onDateSelect }: Schedul
         </div>
       </div>
 
-      <div className="grid grid-cols-1 lg:grid-cols-4 gap-8">
-        <div className="lg:col-span-3">
+      <div className="grid grid-cols-1 lg:grid-cols-6 gap-8">
+        <div className="lg:col-span-4">
           <div className="border border-neutral-200 rounded-xl overflow-hidden shadow-sm">
             <div className="grid grid-cols-7 border-b border-neutral-200">
               {['일', '월', '화', '수', '목', '금', '토'].map((day) => (
@@ -253,15 +253,13 @@ export default function ScheduleCalendar({ selectedDate, onDateSelect }: Schedul
           </div>
         </div>
 
-        <div className="lg:col-span-1">
+        <div className="lg:col-span-2">
           <div className="sticky top-6">
             {selectedDay ? (
               <div className="border border-neutral-200 rounded-xl overflow-hidden shadow-lg bg-white">
-                {/* 헤더 섹션 업그레이드 */}
-                <div className="bg-gradient-to-r from-neutral-800 to-neutral-900 text-white p-6 relative overflow-hidden">
-                  <div className="absolute inset-0 bg-[radial-gradient(circle_at_50%_50%,rgba(255,255,255,0.1),transparent)] pointer-events-none"></div>
+                <div className="bg-black text-white p-6 relative overflow-hidden">
                   <div className="relative z-10">
-                    <div className="flex items-center gap-3 mb-3">
+                    <div className="flex items-center gap-3">
                       <div className="p-2 bg-white/10 rounded-lg backdrop-blur-sm">
                         <Calendar size={18} strokeWidth={1.5} />
                       </div>
@@ -272,26 +270,12 @@ export default function ScheduleCalendar({ selectedDate, onDateSelect }: Schedul
                         <p className="text-neutral-300 text-sm font-medium flex items-center gap-2">
                           {selectedDateInfo?.dayOfWeek}
                           {selectedDateInfo?.isToday && (
-                            <span className="px-2 py-1 bg-blue-500 text-white text-xs rounded-full font-medium animate-pulse">
-                              오늘
+                            <span className="px-2 py-1 bg-white text-black text-xs rounded-full font-medium">
+                              Today
                             </span>
                           )}
                         </p>
                       </div>
-                    </div>
-                    
-                    {/* 경기 수 표시 */}
-                    <div className="flex items-center gap-2 mt-4 pt-4 border-t border-white/20">
-                      <Users size={16} strokeWidth={1.5} className="text-neutral-300" />
-                      <span className="text-sm text-neutral-300 font-medium">
-                        총 {selectedDayGames.length}경기
-                      </span>
-                      {selectedDayGames.length > 0 && (
-                        <div className="ml-auto flex items-center gap-1">
-                          <Star size={14} strokeWidth={1.5} className="text-yellow-400 fill-yellow-400" />
-                          <span className="text-xs text-neutral-300">경기일</span>
-                        </div>
-                      )}
                     </div>
                   </div>
                 </div>
@@ -302,9 +286,6 @@ export default function ScheduleCalendar({ selectedDate, onDateSelect }: Schedul
                       <div className="mb-6 relative">
                         <div className="w-16 h-16 bg-gradient-to-br from-neutral-100 to-neutral-200 rounded-2xl flex items-center justify-center mx-auto shadow-sm">
                           <Calendar size={28} strokeWidth={1} className="text-neutral-400" />
-                        </div>
-                        <div className="absolute -bottom-1 -right-1 w-6 h-6 bg-neutral-300 rounded-full flex items-center justify-center">
-                          <span className="text-xs text-white font-bold">0</span>
                         </div>
                       </div>
                       <h4 className="font-semibold text-neutral-900 mb-2 text-lg">경기가 없는 날</h4>
@@ -319,28 +300,10 @@ export default function ScheduleCalendar({ selectedDate, onDateSelect }: Schedul
                       {selectedDayGames.map((game, index) => (
                         <div
                           key={game.id}
-                          className="bg-white rounded-2xl border-2 border-neutral-200 overflow-hidden hover:shadow-xl transition-all duration-300 hover:border-neutral-300 hover:-translate-y-1"
+                          className="bg-white rounded-2xl border-b border-neutral-200"
                         >
-                          {/* 경기 번호 표시 */}
-                          <div className="flex items-center justify-between mb-6">
-                            <div className="flex items-center gap-2">
-                              <div className="px-3 py-1 bg-gradient-to-r from-neutral-100 to-neutral-200 rounded-full">
-                                <span className="text-xs font-mono text-neutral-600">경기 {index + 1}</span>
-                              </div>
-                              {game.status === 'completed' && (
-                                <div className="px-2 py-1 bg-emerald-100 rounded-full">
-                                  <Trophy size={12} className="text-emerald-600" />
-                                </div>
-                              )}
-                            </div>
-                            <span className={`px-3 py-1 rounded-full border font-medium text-xs shadow-sm ${getStatusColor(game.status)}`}>
-                              {getStatusText(game.status)}
-                            </span>
-                          </div>
 
-                          {/* 팀 매치업 - 더 시각적으로 업그레이드 */}
-                          <div className="mb-6 bg-white border border-neutral-200 rounded-2xl p-6 shadow-sm">
-                            {/* 원정팀 */}
+                          <div className="mb-6 bg-white">
                             <div className="flex items-center gap-4 p-4">
                               <div className="relative">
                                 <TeamLogo teamName={game.away_team} className="w-12 h-12" />
@@ -351,12 +314,6 @@ export default function ScheduleCalendar({ selectedDate, onDateSelect }: Schedul
                               <div className="flex-1">
                                 <div className="font-bold text-lg text-neutral-900 mb-1">
                                   {TEAM_NAMES[game.away_team] || game.away_team}
-                                </div>
-                                <div 
-                                  className="text-xs text-white font-semibold px-3 py-1 rounded-full inline-block"
-                                  style={{ backgroundColor: `var(--team-${game.away_team})` }}
-                                >
-                                  원정팀
                                 </div>
                               </div>
                               {game.away_score !== undefined && game.away_score !== null && (
@@ -375,12 +332,11 @@ export default function ScheduleCalendar({ selectedDate, onDateSelect }: Schedul
                             </div>
                             
                             <div className="flex justify-center py-4">
-                              <div className="px-6 py-2 bg-neutral-100 text-neutral-700 rounded-xl text-sm font-bold tracking-widest">
+                              <div className="px-6 py-2 text-neutral-700 text-sm font-bold tracking-widest">
                                 VS
                               </div>
                             </div>
                             
-                            {/* 홈팀 */}
                             <div className="flex items-center gap-4 p-4">
                               <div className="relative">
                                 <TeamLogo teamName={game.home_team} className="w-12 h-12" />
@@ -394,12 +350,6 @@ export default function ScheduleCalendar({ selectedDate, onDateSelect }: Schedul
                               <div className="flex-1">
                                 <div className="font-bold text-lg text-neutral-900 mb-1">
                                   {TEAM_NAMES[game.home_team] || game.home_team}
-                                </div>
-                                <div 
-                                  className="text-xs text-white font-semibold px-3 py-1 rounded-full inline-block"
-                                  style={{ backgroundColor: `var(--team-${game.home_team})` }}
-                                >
-                                  홈팀
                                 </div>
                               </div>
                               {game.home_score !== undefined && game.home_score !== null && (
@@ -418,7 +368,6 @@ export default function ScheduleCalendar({ selectedDate, onDateSelect }: Schedul
                             </div>
                           </div>
                           
-                          {/* 경기 세부 정보 */}
                           <div className="space-y-4">
                             <div className="grid grid-cols-1 gap-3">
                               <div className="flex items-center gap-3 p-3 bg-neutral-50 rounded-lg">
@@ -445,23 +394,6 @@ export default function ScheduleCalendar({ selectedDate, onDateSelect }: Schedul
                                 </div>
                               </div>
                             </div>
-
-                            {/* 승부 결과 (완료된 경기만) */}
-                            {game.status === 'completed' && game.winner && (
-                              <div className="mt-6 p-4 bg-gradient-to-r from-emerald-50 to-emerald-100 rounded-xl border border-emerald-200">
-                                <div className="flex items-center gap-3">
-                                  <div className="p-2 bg-emerald-500 rounded-lg">
-                                    <Trophy size={16} strokeWidth={1.5} className="text-white" />
-                                  </div>
-                                  <div>
-                                    <div className="font-semibold text-emerald-900 text-sm">승리팀</div>
-                                    <div className="font-mono text-emerald-700 text-base font-medium">
-                                      {TEAM_NAMES[game.winner] || game.winner}
-                                    </div>
-                                  </div>
-                                </div>
-                              </div>
-                            )}
                           </div>
                         </div>
                       ))}
