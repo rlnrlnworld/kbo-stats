@@ -12,6 +12,11 @@ interface MonthlyScheduleResponse {
     dates_with_games: number;
     games_by_date: GamesByDate;
     raw_games: GameSchedule[];
+    // 추가 통계 정보
+    completed_games: number;
+    scheduled_games: number;
+    postponed_games: number;
+    cancelled_games: number;
   };
 }
 
@@ -35,10 +40,18 @@ interface DbGameResult {
   date: Date;
   home_team: string;
   away_team: string;
-  stadium: string;
-  game_time: string;
+  stadium: string | null;
+  game_time: string | null;
   status: string;
+  home_score: number | null;
+  away_score: number | null;
+  winner: string | null;
+  innings: number | null;
+  attendance: number | null;
+  weather: string | null;
+  game_duration: string | null;
   created_at: Date;
+  updated_at: Date;
 }
 
 export async function GET(
@@ -79,7 +92,15 @@ export async function GET(
         stadium,
         game_time,
         status,
-        created_at
+        home_score,
+        away_score,
+        winner,
+        innings,
+        attendance,
+        weather,
+        game_duration,
+        created_at,
+        updated_at
       FROM game_schedule
       WHERE date >= ${startDate}
         AND date <= ${endDate}
@@ -94,7 +115,18 @@ export async function GET(
       stadium: row.stadium || '미정',
       game_time: row.game_time || '18:30:00',
       status: isValidGameStatus(row.status) ? row.status as GameStatus : 'scheduled',
-      created_at: row.created_at.toISOString()
+      
+      home_score: row.home_score,
+      away_score: row.away_score,
+      winner: row.winner ? getTeamIdFromDB(row.winner) : null,
+      
+      innings: row.innings ?? 9,
+      attendance: row.attendance,
+      weather: row.weather,
+      game_duration: row.game_duration,
+      
+      created_at: row.created_at.toISOString(),
+      updated_at: row.updated_at.toISOString()
     }));
 
     const gamesByDate: GamesByDate = {};
@@ -107,6 +139,16 @@ export async function GET(
       gamesByDate[dateKey].push(game);
     });
 
+    const gameStats = games.reduce((stats, game) => {
+      stats[game.status]++;
+      return stats;
+    }, {
+      completed: 0,
+      scheduled: 0,
+      postponed: 0,
+      cancelled: 0
+    } as Record<GameStatus, number>);
+
     const totalGames = games.length;
     const datesWithGames = Object.keys(gamesByDate).length;
 
@@ -118,7 +160,12 @@ export async function GET(
         total_games: totalGames,
         dates_with_games: datesWithGames,
         games_by_date: gamesByDate,
-        raw_games: games
+        raw_games: games,
+        
+        completed_games: gameStats.completed,
+        scheduled_games: gameStats.scheduled,
+        postponed_games: gameStats.postponed,
+        cancelled_games: gameStats.cancelled
       }
     });
 

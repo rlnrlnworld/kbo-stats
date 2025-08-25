@@ -1,5 +1,3 @@
-// src/app/api/schedule/team/[teamId]/next/route.ts
-
 import { NextRequest, NextResponse } from 'next/server';
 import { sql } from '@vercel/postgres';
 
@@ -45,14 +43,21 @@ interface DbNextGameResult {
   stadium: string | null;
   game_time: string | null;
   status: string;
+  home_score: number | null;
+  away_score: number | null;
+  winner: string | null;
+  innings: number | null;
+  attendance: number | null;
+  weather: string | null;
+  game_duration: string | null;
   created_at: Date;
+  updated_at: Date;
   days_until: number;
 }
 
 interface DbUpcomingCountResult {
   upcoming_count: number;
 }
-
 
 export async function GET(
   request: NextRequest,
@@ -72,11 +77,11 @@ export async function GET(
     }
 
     const now = new Date();
-    const koreaTime = new Date(now.getTime() + (9 * 60 * 60 * 1000))
+    const koreaTime = new Date(now.getTime() + (9 * 60 * 60 * 1000));
     const today = koreaTime.toISOString().split('T')[0];
-    const currentTime = koreaTime.toTimeString().split(' ')[0]
+    const currentTime = koreaTime.toTimeString().split(' ')[0];
 
-    console.log(`현재 한국 시간: ${today} ${currentTime}`)
+    console.log(`현재 한국 시간: ${today} ${currentTime}`);
 
     const nextGameResult = await sql<DbNextGameResult>`
       SELECT 
@@ -87,7 +92,15 @@ export async function GET(
         stadium,
         game_time,
         status,
+        home_score,
+        away_score,
+        winner,
+        innings,
+        attendance,
+        weather,
+        game_duration,
         created_at,
+        updated_at,
         (date - CURRENT_DATE) as days_until
       FROM game_schedule
       WHERE (home_team = ${dbTeamId} OR away_team = ${dbTeamId})
@@ -138,7 +151,19 @@ export async function GET(
       stadium: gameRow.stadium || '미정',
       game_time: gameRow.game_time || '18:30:00',
       status: validateGameStatus(gameRow.status),
+      
+      home_score: gameRow.home_score,
+      away_score: gameRow.away_score,
+      winner: gameRow.winner,
+      
+      innings: gameRow.innings ?? 9,
+      attendance: gameRow.attendance,
+      weather: gameRow.weather,
+      game_duration: gameRow.game_duration,
+      
       created_at: gameRow.created_at.toISOString(),
+      updated_at: gameRow.updated_at.toISOString(),
+      
       opponent,
       is_home_game: isHomeGame,
       team_role: isHomeGame ? 'home' : 'away'

@@ -25,6 +25,7 @@ export default function Home() {
   const [showChart, setShowChart] = useState(false)
   const [isModalOpen, setIsModalOpen] = useState(false)
   const [selectedTeam, setSelectedTeam] = useState('')
+  const [selectedDate, setSelectedDate] = useState<string | null>(null)
 
   const { teams, loading: teamsLoading, error: teamsError, mutate: mutateTeams } = useTeams()
   
@@ -361,8 +362,9 @@ export default function Home() {
 
               {!scheduleLoading && !scheduleError && (
                 <ScheduleCalendar 
+                  selectedDate={selectedDate ?? ""}
                   onDateSelect={(date) => {
-                    console.log(date)
+                    setSelectedDate(date)
                   }}
                 />
               )}
