@@ -1,4 +1,3 @@
-/* eslint-disable @typescript-eslint/no-unused-vars */
 "use client"
 
 import TeamModal from '@/components/home/TeamModal'
@@ -7,6 +6,7 @@ import { useTeams } from '@/hooks/useTeams'
 import { useCurrentMonthSchedule } from '@/hooks/useMonthlySchedule'
 import { ListOrdered, TrendingUp, Calendar, Clock, MapPin } from 'lucide-react'
 import React, { useEffect, useState } from 'react'
+import ScheduleCalendar from '@/components/home/ScheduleCalendar'
 
 const mockPlayers = [
   { rank: 1, name: '김도영', team: 'KIA', avg: '.347', hr: 38, rbi: 109, hits: 201 },
@@ -30,15 +30,13 @@ export default function Home() {
   
   const { 
     rawGames, 
-    gamesByDate, 
     totalGames, 
-    hasGamesOnDate,
     getGamesOnDate,
     isLoading: scheduleLoading, 
     isError: scheduleError,
     mutate: mutateSchedule 
   } = useCurrentMonthSchedule({
-    refreshInterval: 60000 // 1분마다 갱신
+    refreshInterval: 60000
   })
 
   useEffect(() => {
@@ -65,14 +63,8 @@ export default function Home() {
   }
 
   const today = new Date()
-  const todayStr = today.toISOString().split('T')[0]
-  const tomorrow = new Date(today)
-  tomorrow.setDate(tomorrow.getDate() + 1)
-  const tomorrowStr = tomorrow.toISOString().split('T')[0]
 
-  const todayGames = getGamesOnDate(todayStr)
-  const tomorrowGames = getGamesOnDate(tomorrowStr)
-  const recentGames = rawGames.slice(0, 10)
+
 
   return (
     <div className="min-h-screen bg-neutral-50">
@@ -368,167 +360,11 @@ export default function Home() {
               )}
 
               {!scheduleLoading && !scheduleError && (
-                <div className="space-y-12">
-                  <div>
-                    <div className="flex items-center gap-2 mb-6">
-                      <Calendar size={20} className="text-neutral-600" />
-                      <h3 className="text-lg font-medium text-neutral-900">
-                        오늘의 경기
-                      </h3>
-                      <span className="text-sm text-neutral-500">
-                        ({todayStr})
-                      </span>
-                    </div>
-                    
-                    {todayGames.length === 0 ? (
-                      <div className="text-center py-8 text-neutral-400 bg-neutral-25 rounded-lg">
-                        오늘은 경기가 없습니다
-                      </div>
-                    ) : (
-                      <div className="grid gap-4">
-                        {todayGames.map((game) => (
-                          <div 
-                            key={game.id}
-                            className="flex items-center justify-between p-6 bg-white border border-neutral-200 rounded-lg hover:shadow-md transition-shadow"
-                          >
-                            <div className="flex items-center gap-6">
-                              <div className="text-lg font-medium text-neutral-900">
-                                {game.away_team} vs {game.home_team}
-                              </div>
-                              <div className="flex items-center gap-2 text-sm text-neutral-500">
-                                <Clock size={16} />
-                                {game.game_time}
-                              </div>
-                              <div className="flex items-center gap-2 text-sm text-neutral-500">
-                                <MapPin size={16} />
-                                {game.stadium}
-                              </div>
-                            </div>
-                            <div className={`px-3 py-1 rounded-full text-xs font-medium ${
-                              game.status === 'scheduled' ? 'bg-green-100 text-green-800' :
-                              game.status === 'completed' ? 'bg-gray-100 text-gray-800' :
-                              game.status === 'postponed' ? 'bg-yellow-100 text-yellow-800' :
-                              'bg-red-100 text-red-800'
-                            }`}>
-                              {game.status === 'scheduled' ? '예정' :
-                               game.status === 'completed' ? '종료' :
-                               game.status === 'postponed' ? '연기' : '취소'}
-                            </div>
-                          </div>
-                        ))}
-                      </div>
-                    )}
-                  </div>
-
-                  <div>
-                    <div className="flex items-center gap-2 mb-6">
-                      <Calendar size={20} className="text-neutral-600" />
-                      <h3 className="text-lg font-medium text-neutral-900">
-                        내일의 경기
-                      </h3>
-                      <span className="text-sm text-neutral-500">
-                        ({tomorrowStr})
-                      </span>
-                    </div>
-                    
-                    {tomorrowGames.length === 0 ? (
-                      <div className="text-center py-8 text-neutral-400 bg-neutral-25 rounded-lg">
-                        내일은 경기가 없습니다
-                      </div>
-                    ) : (
-                      <div className="grid gap-4">
-                        {tomorrowGames.map((game) => (
-                          <div 
-                            key={game.id}
-                            className="flex items-center justify-between p-6 bg-white border border-neutral-200 rounded-lg hover:shadow-md transition-shadow"
-                          >
-                            <div className="flex items-center gap-6">
-                              <div className="text-lg font-medium text-neutral-900">
-                                {game.away_team} vs {game.home_team}
-                              </div>
-                              <div className="flex items-center gap-2 text-sm text-neutral-500">
-                                <Clock size={16} />
-                                {game.game_time}
-                              </div>
-                              <div className="flex items-center gap-2 text-sm text-neutral-500">
-                                <MapPin size={16} />
-                                {game.stadium}
-                              </div>
-                            </div>
-                            <div className="px-3 py-1 rounded-full text-xs font-medium bg-blue-100 text-blue-800">
-                              예정
-                            </div>
-                          </div>
-                        ))}
-                      </div>
-                    )}
-                  </div>
-
-                  <div>
-                    <h3 className="text-lg font-medium text-neutral-900 mb-6">
-                      이번 달 경기 일정
-                    </h3>
-                    
-                    <div className="border-t border-neutral-200">
-                      {/* Header */}
-                      <div className="grid grid-cols-5 gap-6 py-4 border-b border-neutral-100 bg-neutral-25">
-                        <span className="text-xs text-neutral-400 uppercase tracking-wider">
-                          날짜
-                        </span>
-                        <span className="text-xs text-neutral-400 uppercase tracking-wider">
-                          경기
-                        </span>
-                        <span className="text-xs text-neutral-400 uppercase tracking-wider text-center">
-                          시간
-                        </span>
-                        <span className="text-xs text-neutral-400 uppercase tracking-wider">
-                          구장
-                        </span>
-                        <span className="text-xs text-neutral-400 uppercase tracking-wider text-center">
-                          상태
-                        </span>
-                      </div>
-
-                      {recentGames.map((game) => (
-                        <div
-                          key={game.id}
-                          className="grid grid-cols-5 gap-6 py-4 border-b border-neutral-50 
-                                   hover:bg-neutral-25 hover:-mx-8 hover:px-8 cursor-pointer
-                                   transition-all duration-200"
-                        >
-                          <div className="text-sm text-neutral-600 font-mono">
-                            {new Date(game.date).toLocaleDateString('ko-KR', {
-                              month: 'short',
-                              day: 'numeric',
-                              weekday: 'short'
-                            })}
-                          </div>
-                          <div className="text-sm font-medium text-neutral-900">
-                            {game.away_team} vs {game.home_team}
-                          </div>
-                          <div className="text-sm text-neutral-600 text-center font-mono">
-                            {game.game_time}
-                          </div>
-                          <div className="text-sm text-neutral-600">
-                            {game.stadium}
-                          </div>
-                          <div className="text-center">
-                            <span className={`inline-block px-2 py-1 rounded-full text-xs font-medium ${
-                              game.status === 'scheduled' ? 'bg-green-100 text-green-800' :
-                              game.status === 'completed' ? 'bg-gray-100 text-gray-800' :
-                              game.status === 'postponed' ? 'bg-yellow-100 text-yellow-800' :
-                              'bg-red-100 text-red-800'
-                            }`}>
-                              {game.status === 'scheduled' ? '예정' :
-                               game.status === 'completed' ? '종료' :
-                               game.status === 'postponed' ? '연기' : '취소'}
-                            </span>
-                          </div>
-                        </div>
-                      ))}
-                    </div>
-                  </div>
-                </div>
+                <ScheduleCalendar 
+                  onDateSelect={(date) => {
+                    console.log(date)
+                  }}
+                />
               )}
             </section>
           )}
