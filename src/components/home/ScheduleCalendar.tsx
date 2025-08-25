@@ -17,7 +17,6 @@ export default function ScheduleCalendar({ selectedDate, onDateSelect }: Schedul
   const month = currentDate.getMonth() + 1
 
   const { 
-    gamesByDate, 
     totalGames, 
     hasGamesOnDate,
     getGamesOnDate,

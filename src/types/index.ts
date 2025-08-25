@@ -9,9 +9,6 @@ export type {
   Player 
 } from './player'
 
-// Game types
-export type { Game, Schedule, GameStatus } from './game'
-
 // Common types
 export type { 
   ApiResponse, 
