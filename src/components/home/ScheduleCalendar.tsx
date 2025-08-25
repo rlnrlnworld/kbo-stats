@@ -175,8 +175,8 @@ export default function ScheduleCalendar({ selectedDate, onDateSelect }: Schedul
         </div>
       </div>
 
-      <div className="grid grid-cols-1 lg:grid-cols-4 gap-8">
-        <div className="lg:col-span-3">
+      <div className="grid grid-cols-1 lg:grid-cols-6 gap-8">
+        <div className="lg:col-span-4">
           <div className="border border-neutral-200 rounded-xl overflow-hidden shadow-sm">
             <div className="grid grid-cols-7 border-b border-neutral-200">
               {['일', '월', '화', '수', '목', '금', '토'].map((day) => (
@@ -253,7 +253,7 @@ export default function ScheduleCalendar({ selectedDate, onDateSelect }: Schedul
           </div>
         </div>
 
-        <div className="lg:col-span-1">
+        <div className="lg:col-span-2">
           <div className="sticky top-6">
             {selectedDay ? (
               <div className="border border-neutral-200 rounded-xl overflow-hidden shadow-lg bg-white">
