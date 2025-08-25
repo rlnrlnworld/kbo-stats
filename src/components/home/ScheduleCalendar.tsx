@@ -1,24 +1,95 @@
 "use client"
 
 import { useCurrentMonthSchedule } from '@/hooks/useMonthlySchedule'
-import { Calendar, Clock, MapPin, ChevronLeft, ChevronRight, Trophy, Users } from 'lucide-react'
+import { Calendar, Clock, MapPin, ChevronLeft, ChevronRight, Trophy } from 'lucide-react'
 import React, { useState } from 'react'
-
-import kiaLogo from '/team-logos/kia.svg'
-import ssgLogo from '/team-logos/ssg.svg'
-import doosanLogo from '/team-logos/doosan.svg'
-import hanwhaLogo from '/team-logos/hanwha.svg'
-import kiwoomLogo from '/team-logos/kiwoom.svg'
-import ktLogo from '/team-logos/kt.svg'
-import lgLogo from '/team-logos/lg.svg'
-import lotteLogo from '/team-logos/lotte.svg'
-import ncLogo from '/team-logos/nc.svg'
-import samsungLogo from '/team-logos/samsung.svg'
 import Image from 'next/image'
 
 interface ScheduleCalendarProps {
   selectedDate?: string
   onDateSelect?: (date: string) => void
+}
+
+const getTeamLogoFileName = (teamName: string): string => {
+  const teamMap: Record<string, string> = {
+    'KIA': 'kia',
+    '기아': 'kia',
+    'SSG': 'ssg',
+    'SK': 'ssg',
+    '두산': 'doosan',
+    'Doosan': 'doosan',
+    '한화': 'hanwha',
+    'Hanwha': 'hanwha',
+    '키움': 'kiwoom',
+    'Kiwoom': 'kiwoom',
+    'KT': 'kt',
+    'LG': 'lg',
+    '롯데': 'lotte',
+    'Lotte': 'lotte',
+    'NC': 'nc',
+    '삼성': 'samsung',
+    'Samsung': 'samsung',
+  }
+  
+  return teamMap[teamName] || teamName.toLowerCase()
+}
+
+const TeamLogo = ({ teamName, className = "w-6 h-6" }: { teamName: string, className?: string }) => {
+  const [logoSrc, setLogoSrc] = useState<string | null>(null)
+  const [isLoading, setIsLoading] = useState(true)
+  const [hasError, setHasError] = useState(false)
+
+  React.useEffect(() => {
+    const loadLogo = async () => {
+      try {
+        setIsLoading(true)
+        setHasError(false)
+        
+        const logoFileName = getTeamLogoFileName(teamName)
+        
+        const logoModule = await import(`/team-logos/${logoFileName}.svg`)
+        setLogoSrc(logoModule.default || `/team-logos/${logoFileName}.svg`)
+      } catch (error) {
+        console.warn(`로고 로드 실패: ${teamName}`, error)
+        setHasError(true)
+        const logoFileName = getTeamLogoFileName(teamName)
+        setLogoSrc(`/team-logos/${logoFileName}.svg`)
+      } finally {
+        setIsLoading(false)
+      }
+    }
+
+    if (teamName) {
+      loadLogo()
+    }
+  }, [teamName])
+
+  if (isLoading) {
+    return (
+      <div className={`rounded-full bg-neutral-200 animate-pulse ${className}`} />
+    )
+  }
+
+  if (logoSrc && !hasError) {
+    return (
+      <Image
+        src={logoSrc}
+        alt={`${teamName} 로고`}
+        width={24}
+        height={24}
+        className={className}
+        onError={() => setHasError(true)}
+      />
+    )
+  }
+
+  return (
+    <div className={`rounded-full bg-neutral-400 flex items-center justify-center ${className}`}>
+      <span className="text-xs font-bold text-white">
+        {teamName.charAt(0)}
+      </span>
+    </div>
+  )
 }
 
 export default function ScheduleCalendar({ selectedDate, onDateSelect }: ScheduleCalendarProps) {
@@ -29,7 +100,6 @@ export default function ScheduleCalendar({ selectedDate, onDateSelect }: Schedul
   const month = currentDate.getMonth() + 1
 
   const { 
-    totalGames, 
     hasGamesOnDate,
     getGamesOnDate,
     getGameCount,
@@ -156,7 +226,6 @@ export default function ScheduleCalendar({ selectedDate, onDateSelect }: Schedul
               ))}
             </div>
 
-            {/* Calendar Grid */}
             <div className="grid grid-cols-7">
               {emptyDays.map((_, index) => (
                 <div 
@@ -247,15 +316,19 @@ export default function ScheduleCalendar({ selectedDate, onDateSelect }: Schedul
                     </div>
                   ) : (
                     <div className="space-y-6">
-                      {selectedDayGames.map(( game ) => (
+                      {selectedDayGames.map((game, index) => (
                         <div
                           key={game.id}
                           className="border-b border-neutral-100 pb-6 last:border-b-0 last:pb-0"
                         >
+                          <div className="text-xs text-neutral-400 uppercase tracking-wider mb-4 font-normal">
+                            {index + 1}경기
+                          </div>
+                          
                           <div className="mb-6">
                             <div className="flex items-center justify-between mb-3">
                               <div className="flex items-center gap-3">
-                                <Image alt='away_logo' src={`${game.away_team}Logo`} />
+                                <TeamLogo teamName={game.away_team} />
                                 <span className="font-normal text-neutral-900">{game.away_team}</span>
                                 <span className="text-xs text-neutral-500 font-mono">원정</span>
                               </div>
@@ -270,7 +343,7 @@ export default function ScheduleCalendar({ selectedDate, onDateSelect }: Schedul
                             
                             <div className="flex items-center justify-between mt-3">
                               <div className="flex items-center gap-3">
-                                <Image alt='away_logo' src={`${game.home_team}Logo`} />
+                                <TeamLogo teamName={game.home_team} />
                                 <span className="font-normal text-neutral-900">{game.home_team}</span>
                                 <span className="text-xs text-neutral-500 font-mono">홈</span>
                               </div>
@@ -280,7 +353,6 @@ export default function ScheduleCalendar({ selectedDate, onDateSelect }: Schedul
                             </div>
                           </div>
                           
-                          {/* Game Info */}
                           <div className="space-y-3 mb-4">
                             <div className="flex items-center gap-2 text-sm text-neutral-600">
                               <Clock size={14} strokeWidth={1} />
@@ -292,7 +364,6 @@ export default function ScheduleCalendar({ selectedDate, onDateSelect }: Schedul
                             </div>
                           </div>
 
-                          {/* Status */}
                           <div className="flex items-center justify-between text-xs">
                             <span className={`px-3 py-1 rounded border font-normal ${getStatusColor(game.status)}`}>
                               {getStatusText(game.status)}
