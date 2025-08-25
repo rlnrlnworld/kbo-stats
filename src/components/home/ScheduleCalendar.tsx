@@ -4,19 +4,21 @@ import { useCurrentMonthSchedule } from '@/hooks/useMonthlySchedule'
 import { Calendar, Clock, MapPin, ChevronLeft, ChevronRight, Trophy, Users } from 'lucide-react'
 import React, { useState } from 'react'
 
+import kiaLogo from '/team-logos/kia.svg'
+import ssgLogo from '/team-logos/ssg.svg'
+import doosanLogo from '/team-logos/doosan.svg'
+import hanwhaLogo from '/team-logos/hanwha.svg'
+import kiwoomLogo from '/team-logos/kiwoom.svg'
+import ktLogo from '/team-logos/kt.svg'
+import lgLogo from '/team-logos/lg.svg'
+import lotteLogo from '/team-logos/lotte.svg'
+import ncLogo from '/team-logos/nc.svg'
+import samsungLogo from '/team-logos/samsung.svg'
+import Image from 'next/image'
+
 interface ScheduleCalendarProps {
   selectedDate?: string
   onDateSelect?: (date: string) => void
-}
-
-const getTeamColorClass = (teamName: string): string => {
-  const team = teamName.toLowerCase()
-  return `bg-team-${team}`
-}
-
-const getTeamColorStyle = (teamName: string): React.CSSProperties => {
-  const team = teamName.toLowerCase()
-  return { backgroundColor: `var(--color-team-${team}, #6B7280)` }
 }
 
 export default function ScheduleCalendar({ selectedDate, onDateSelect }: ScheduleCalendarProps) {
@@ -118,7 +120,6 @@ export default function ScheduleCalendar({ selectedDate, onDateSelect }: Schedul
 
   return (
     <div>
-      {/* Calendar Header */}
       <div className="flex items-center justify-center mb-8">
         <div className="flex items-center gap-4">
           <button
@@ -139,11 +140,9 @@ export default function ScheduleCalendar({ selectedDate, onDateSelect }: Schedul
         </div>
       </div>
 
-      <div className="grid grid-cols-1 lg:grid-cols-4 gap-16">
-        {/* Calendar */}
+      <div className="grid grid-cols-1 lg:grid-cols-4 gap-8">
         <div className="lg:col-span-3">
           <div className="border border-neutral-200 rounded-sm overflow-hidden">
-            {/* Days Header */}
             <div className="grid grid-cols-7 border-b border-neutral-200">
               {['일', '월', '화', '수', '목', '금', '토'].map((day, index) => (
                 <div 
@@ -216,7 +215,6 @@ export default function ScheduleCalendar({ selectedDate, onDateSelect }: Schedul
           </div>
         </div>
 
-        {/* Game Details */}
         <div className="lg:col-span-1">
           <div className="sticky top-6">
             {selectedDay ? (
@@ -230,19 +228,11 @@ export default function ScheduleCalendar({ selectedDate, onDateSelect }: Schedul
                         day: 'numeric'
                       })}
                     </h3>
-                  </div>
-                  <p className="text-neutral-300 text-sm font-normal">
-                    {new Date(selectedDay).toLocaleDateString('ko-KR', {
-                      weekday: 'long'
-                    })}
-                  </p>
-                  <div className="mt-4 pt-4 border-t border-neutral-700">
-                    <div className="flex items-center gap-2">
-                      <Users size={16} strokeWidth={1} />
-                      <span className="text-sm font-normal">
-                        {selectedDayGames.length}경기
-                      </span>
-                    </div>
+                    <p className="text-neutral-300 text-sm font-normal">
+                      {new Date(selectedDay).toLocaleDateString('ko-KR', {
+                        weekday: 'long'
+                      })}
+                    </p>
                   </div>
                 </div>
 
@@ -257,22 +247,15 @@ export default function ScheduleCalendar({ selectedDate, onDateSelect }: Schedul
                     </div>
                   ) : (
                     <div className="space-y-6">
-                      {selectedDayGames.map((game, index) => (
+                      {selectedDayGames.map(( game ) => (
                         <div
                           key={game.id}
                           className="border-b border-neutral-100 pb-6 last:border-b-0 last:pb-0"
                         >
-                          <div className="text-xs text-neutral-400 uppercase tracking-wider mb-4 font-normal">
-                            {index + 1}경기
-                          </div>
-                          
                           <div className="mb-6">
                             <div className="flex items-center justify-between mb-3">
                               <div className="flex items-center gap-3">
-                                <div 
-                                  className="w-2 h-2 rounded-full"
-                                  style={getTeamColorStyle(game.away_team)}
-                                />
+                                <Image alt='away_logo' src={`${game.away_team}Logo`} />
                                 <span className="font-normal text-neutral-900">{game.away_team}</span>
                                 <span className="text-xs text-neutral-500 font-mono">원정</span>
                               </div>
@@ -287,10 +270,7 @@ export default function ScheduleCalendar({ selectedDate, onDateSelect }: Schedul
                             
                             <div className="flex items-center justify-between mt-3">
                               <div className="flex items-center gap-3">
-                                <div 
-                                  className="w-2 h-2 rounded-full"
-                                  style={getTeamColorStyle(game.home_team)}
-                                />
+                                <Image alt='away_logo' src={`${game.home_team}Logo`} />
                                 <span className="font-normal text-neutral-900">{game.home_team}</span>
                                 <span className="text-xs text-neutral-500 font-mono">홈</span>
                               </div>
