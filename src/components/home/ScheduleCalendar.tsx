@@ -324,7 +324,7 @@ export default function ScheduleCalendar({ selectedDate, onDateSelect }: Schedul
                             </div>
                             
                             <div className="flex justify-center py-3">
-                              <div className="px-4 py-2 bg-neutral-900 text-white rounded-full text-xs font-semibold tracking-wider shadow-sm">
+                              <div className="px-4 py-2 text-black rounded-full text-xs font-semibold tracking-wider shadow-sm">
                                 VS
                               </div>
                             </div>
@@ -336,7 +336,7 @@ export default function ScheduleCalendar({ selectedDate, onDateSelect }: Schedul
                                   <div className="font-semibold text-neutral-900 text-base">
                                     {TEAM_NAMES[game.home_team] || game.home_team}
                                   </div>
-                                  <div className="text-xs font-medium bg-black text-white px-2 py-1 rounded-full inline-block mt-1">
+                                  <div className={`text-xs font-medium bg-[var(--team-${game.home_team})] text-white px-2 py-1 rounded-full inline-block mt-1`}>
                                     홈
                                   </div>
                                 </div>
@@ -349,7 +349,6 @@ export default function ScheduleCalendar({ selectedDate, onDateSelect }: Schedul
                             </div>
                           </div>
                           
-                          {/* 경기 세부 정보 */}
                           <div className="space-y-4">
                             <div className="grid grid-cols-1 gap-3">
                               <div className="flex items-center gap-3 p-3 bg-neutral-50 rounded-lg">
