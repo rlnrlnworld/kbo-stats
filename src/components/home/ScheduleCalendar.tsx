@@ -302,8 +302,8 @@ export default function ScheduleCalendar({ selectedDate, onDateSelect }: Schedul
                           className={`bg-white rounded-2xl ${index === 0 ? '' : 'border-t border-neutral-200'}`}
                         >
 
-                          <div className="mb-6 bg-white">
-                            <div className={`flex items-center gap-4 p-4 ${game.status === 'completed' ? 'justify-between' : 'justify-center'}`}>
+                          <div className="flex items-center mb-6 bg-white">
+                            <div className={`flex-1 flex flex-col items-center gap-4 p-4 ${game.status === 'completed' ? 'justify-between' : 'justify-center'}`}>
                               <div className='flex items-center gap-2'>
                                 <div className="relative">
                                   <TeamLogo teamName={game.away_team} className="w-12 h-12" />
@@ -338,7 +338,7 @@ export default function ScheduleCalendar({ selectedDate, onDateSelect }: Schedul
                               </div>
                             </div>
                             
-                            <div className="flex items-center gap-4 p-4">
+                            <div className={`flex-1 flex flex-col items-center gap-4 p-4 ${game.status === 'completed' ? 'justify-between' : 'justify-center'}`}>
                               <div className="relative">
                                 <TeamLogo teamName={game.home_team} className="w-12 h-12" />
                                 <div 
