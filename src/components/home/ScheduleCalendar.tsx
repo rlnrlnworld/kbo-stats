@@ -2,7 +2,7 @@
 
 import { TEAM_NAMES } from '@/constants/teamData'
 import { useCurrentMonthSchedule } from '@/hooks/useMonthlySchedule'
-import { Calendar, Clock, MapPin, ChevronLeft, ChevronRight, Trophy, Users, Star, Activity } from 'lucide-react'
+import { Calendar, Clock, MapPin, ChevronLeft, ChevronRight, Activity } from 'lucide-react'
 import React, { useState } from 'react'
 
 interface ScheduleCalendarProps {
@@ -214,14 +214,14 @@ export default function ScheduleCalendar({ selectedDate, onDateSelect }: Schedul
                     className={`
                       aspect-square p-4 cursor-pointer border-b border-r border-neutral-100 transition-all duration-300
                       relative hover:bg-gradient-to-br hover:from-neutral-50 hover:to-neutral-100 group bg-white
-                      hover:shadow-sm transform hover:scale-[1.02]
-                      ${today ? 'bg-gradient-to-br from-blue-50 to-blue-100 ring-2 ring-blue-200' : ''}
-                      ${selected ? 'bg-gradient-to-br from-neutral-800 to-neutral-900 text-white shadow-lg ring-2 ring-neutral-300' : ''}
+                      hover:shadow-sm transform
+                      ${today ? 'border border-black' : ''}
+                      ${selected ? 'bg-gradient-to-br from-neutral-800 to-neutral-900 text-white z-20' : ''}
                     `}
                   >
                     <div className={`
                       text-base font-medium mb-2 transition-colors duration-200
-                      ${today && !selected ? 'text-blue-700 font-semibold' : 
+                      ${today && !selected ? 'text-black font-semibold' : 
                         selected ? 'text-white font-semibold' :
                         dayOfWeek === 0 ? 'text-red-500' :
                         dayOfWeek === 6 ? 'text-blue-500' :
@@ -243,7 +243,7 @@ export default function ScheduleCalendar({ selectedDate, onDateSelect }: Schedul
 
                     {today && !selected && (
                       <div className="absolute top-3 right-3">
-                        <div className="w-2.5 h-2.5 bg-blue-500 rounded-full animate-pulse shadow-sm"></div>
+                        <div className="w-2.5 h-2.5 bg-black rounded-full animate-pulse shadow-sm"></div>
                       </div>
                     )}
                   </div>
