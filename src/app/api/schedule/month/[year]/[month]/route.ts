@@ -1,7 +1,6 @@
 import { NextRequest, NextResponse } from 'next/server';
 import { sql } from '@vercel/postgres';
 import { GamesByDate, GameSchedule, GameStatus } from '@/types/game';
-import { getTeamIdFromDB } from '@/constants/teamData';
 
 interface MonthlyScheduleResponse {
   success: true;
@@ -110,15 +109,15 @@ export async function GET(
     const games: GameSchedule[] = result.rows.map((row): GameSchedule => ({
       id: row.id,
       date: row.date.toISOString().split('T')[0],
-      home_team: getTeamIdFromDB(row.home_team),
-      away_team: getTeamIdFromDB(row.away_team),
+      home_team: row.home_team,
+      away_team: row.away_team,
       stadium: row.stadium || '미정',
       game_time: row.game_time || '18:30:00',
       status: isValidGameStatus(row.status) ? row.status as GameStatus : 'scheduled',
       
       home_score: row.home_score,
       away_score: row.away_score,
-      winner: row.winner ? getTeamIdFromDB(row.winner) : null,
+      winner: row.winner ? row.winner : null,
       
       innings: row.innings ?? 9,
       attendance: row.attendance,
