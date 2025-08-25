@@ -77,7 +77,7 @@ export function useMonthlySchedule({
     throw new Error(`Invalid year: ${year}. Year must be between 2020 and 2030.`)
   }
 
-  const apiUrl = `/api/schedule/${year}/${month}`
+  const apiUrl = `/api/schedule/month/${year}/${month}`
   
   const {
     data,
