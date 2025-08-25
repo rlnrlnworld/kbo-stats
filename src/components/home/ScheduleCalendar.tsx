@@ -213,15 +213,14 @@ export default function ScheduleCalendar({ selectedDate, onDateSelect }: Schedul
                     onClick={() => handleDayClick(day)}
                     className={`
                       aspect-square p-4 cursor-pointer border-b border-r border-neutral-100 transition-all duration-300
-                      relative hover:bg-gradient-to-br hover:from-neutral-50 hover:to-neutral-100 group bg-white
-                      hover:shadow-sm transform hover:scale-[1.02]
-                      ${today ? 'bg-gradient-to-br from-blue-50 to-blue-100 ring-2 ring-blue-200' : ''}
-                      ${selected ? 'bg-gradient-to-br from-neutral-800 to-neutral-900 text-white shadow-lg ring-2 ring-neutral-300' : ''}
+                      relative group bg-white
+                      ${today ? 'border border-black z-20' : ''}
+                      ${selected ? 'bg-black text-white ' : 'hover:bg-gradient-to-br hover:from-neutral-50 hover:to-neutral-100'}
                     `}
                   >
                     <div className={`
                       text-base font-medium mb-2 transition-colors duration-200
-                      ${today && !selected ? 'text-blue-700 font-semibold' : 
+                      ${today && !selected ? 'text-black font-semibold' : 
                         selected ? 'text-white font-semibold' :
                         dayOfWeek === 0 ? 'text-red-500' :
                         dayOfWeek === 6 ? 'text-blue-500' :
@@ -242,8 +241,8 @@ export default function ScheduleCalendar({ selectedDate, onDateSelect }: Schedul
                     )}
 
                     {today && !selected && (
-                      <div className="absolute top-3 right-3">
-                        <div className="w-2.5 h-2.5 bg-blue-500 rounded-full animate-pulse shadow-sm"></div>
+                      <div className="absolute top-5 right-3">
+                        <div className="w-2.5 h-2.5 bg-black rounded-full animate-pulse shadow-sm"></div>
                       </div>
                     )}
                   </div>
@@ -304,7 +303,7 @@ export default function ScheduleCalendar({ selectedDate, onDateSelect }: Schedul
                         >
 
                           <div className="mb-6 bg-white">
-                            <div className={`flex items-center gap-4 p-4 ${game.status === 'completed' ? 'justify-between' : ''}`}>
+                            <div className={`flex items-center gap-4 p-4 ${game.status === 'completed' ? 'justify-between' : 'justify-center'}`}>
                               <div className='flex items-center gap-2'>
                                 <div className="relative">
                                   <TeamLogo teamName={game.away_team} className="w-12 h-12" />
