@@ -10,29 +10,6 @@ interface ScheduleCalendarProps {
   onDateSelect?: (date: string) => void
 }
 
-const getTeamLogoFileName = (teamName: string): string => {
-  const teamMap: Record<string, string> = {
-    'KIA': 'kia',
-    '기아': 'kia',
-    'SSG': 'ssg',
-    'SK': 'ssg',
-    '두산': 'doosan',
-    'Doosan': 'doosan',
-    '한화': 'hanwha',
-    'Hanwha': 'hanwha',
-    '키움': 'kiwoom',
-    'Kiwoom': 'kiwoom',
-    'KT': 'kt',
-    'LG': 'lg',
-    '롯데': 'lotte',
-    'Lotte': 'lotte',
-    'NC': 'nc',
-    '삼성': 'samsung',
-    'Samsung': 'samsung',
-  }
-  
-  return teamMap[teamName] || teamName.toLowerCase()
-}
 
 const TeamLogo = ({ teamName, className = "w-6 h-6" }: { teamName: string, className?: string }) => {
   const [logoSrc, setLogoSrc] = useState<string | null>(null)
@@ -45,15 +22,12 @@ const TeamLogo = ({ teamName, className = "w-6 h-6" }: { teamName: string, class
         setIsLoading(true)
         setHasError(false)
         
-        const logoFileName = getTeamLogoFileName(teamName)
-        
-        const logoModule = await import(`/team-logos/${logoFileName}.svg`)
-        setLogoSrc(logoModule.default || `/team-logos/${logoFileName}.svg`)
+        const logoModule = await import(`/team-logos/${teamName}.svg`)
+        setLogoSrc(logoModule.default || `/team-logos/${teamName}.svg`)
       } catch (error) {
         console.warn(`로고 로드 실패: ${teamName}`, error)
         setHasError(true)
-        const logoFileName = getTeamLogoFileName(teamName)
-        setLogoSrc(`/team-logos/${logoFileName}.svg`)
+        setLogoSrc(`/team-logos/${teamName}.svg`)
       } finally {
         setIsLoading(false)
       }
