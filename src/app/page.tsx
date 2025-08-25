@@ -1,11 +1,12 @@
+/* eslint-disable @typescript-eslint/no-unused-vars */
 "use client"
 
 import TeamModal from '@/components/home/TeamModal'
 import TeamRankingChart from '@/components/home/TeamRankingChart'
 import { useTeams } from '@/hooks/useTeams'
-import { ListOrdered, TrendingUp } from 'lucide-react'
+import { useCurrentMonthSchedule } from '@/hooks/useMonthlySchedule'
+import { ListOrdered, TrendingUp, Calendar, Clock, MapPin } from 'lucide-react'
 import React, { useEffect, useState } from 'react'
-
 
 const mockPlayers = [
   { rank: 1, name: '김도영', team: 'KIA', avg: '.347', hr: 38, rbi: 109, hits: 201 },
@@ -25,10 +26,25 @@ export default function Home() {
   const [isModalOpen, setIsModalOpen] = useState(false)
   const [selectedTeam, setSelectedTeam] = useState('')
 
-  const { teams, loading, error, mutate } = useTeams()
+  const { teams, loading: teamsLoading, error: teamsError, mutate: mutateTeams } = useTeams()
+  
+  const { 
+    rawGames, 
+    gamesByDate, 
+    totalGames, 
+    hasGamesOnDate,
+    getGamesOnDate,
+    isLoading: scheduleLoading, 
+    isError: scheduleError,
+    mutate: mutateSchedule 
+  } = useCurrentMonthSchedule({
+    refreshInterval: 60000 // 1분마다 갱신
+  })
+
   useEffect(() => {
-    console.log(teams)
-  }, [teams])
+    console.log('Teams:', teams)
+    console.log('Schedule:', { totalGames, rawGames: rawGames.slice(0, 3) })
+  }, [teams, totalGames, rawGames])
 
   useEffect(() => {
     const teamIds = ['kia', 'samsung', 'lg', 'kt', 'kiwoom', 'nc', 'lotte', 'ssg', 'doosan', 'hanwha']
@@ -41,13 +57,26 @@ export default function Home() {
   const validTeams = teams?.slice(0, 10)
 
   const handleRefresh = () => {
-    mutate()
+    if (activeNav === 'standings') {
+      mutateTeams()
+    } else if (activeNav === 'schedule') {
+      mutateSchedule()
+    }
   }
+
   const today = new Date()
+  const todayStr = today.toISOString().split('T')[0]
+  const tomorrow = new Date(today)
+  tomorrow.setDate(tomorrow.getDate() + 1)
+  const tomorrowStr = tomorrow.toISOString().split('T')[0]
+
+  const todayGames = getGamesOnDate(todayStr)
+  const tomorrowGames = getGamesOnDate(tomorrowStr)
+  const recentGames = rawGames.slice(0, 10)
+
   return (
     <div className="min-h-screen bg-neutral-50">
       <div className="max-w-6xl mx-auto px-8">
-        {/* Header */}
         <header className="pt-16 pb-24 text-center">
           <h1 className="text-5xl font-light tracking-tight mb-4 text-neutral-900">
             KBO
@@ -57,7 +86,6 @@ export default function Home() {
           </p>
         </header>
 
-        {/* Navigation */}
         <nav className="flex justify-center mb-32">
           <ul className="flex gap-16">
             {[
@@ -84,9 +112,7 @@ export default function Home() {
           </ul>
         </nav>
 
-        {/* Main Content */}
         <main>
-          {/* Teams Section */}
           {activeNav === 'standings' && (
             <section className="mb-40">
               <div className="mb-16">
@@ -101,16 +127,16 @@ export default function Home() {
                 </p>
               </div>
 
-              {loading && (
+              {teamsLoading && (
                 <div className="text-center py-20 text-neutral-400">
                   순위 데이터를 불러오는 중...
                 </div>
               )}
 
-              {error && (
+              {teamsError && (
                 <div className="text-center py-20">
                   <div className="text-red-600 mb-4">데이터를 불러올 수 없습니다</div>
-                  <div className="text-sm text-neutral-500 mb-4">{error}</div>
+                  <div className="text-sm text-neutral-500 mb-4">{teamsError}</div>
                   <button 
                     onClick={handleRefresh}
                     className="px-6 py-2 bg-neutral-900 text-white rounded hover:bg-neutral-700 transition-colors"
@@ -120,7 +146,7 @@ export default function Home() {
                 </div>
               )}
 
-              {!loading && !error && (
+              {!teamsLoading && !teamsError && (
                 <div className='flex flex-col pb-40'>
                   <div className='flex justify-end mb-1.5 text-neutral-900'>
                     {showChart ? (
@@ -139,7 +165,7 @@ export default function Home() {
                     <TeamRankingChart />
                   ) : (
                     <div className="border-t border-neutral-200">
-                      {validTeams.map((team) => (
+                      {validTeams?.map((team) => (
                         <div
                           key={team.id}
                           onClick={() => {
@@ -153,7 +179,6 @@ export default function Home() {
                             ${getTeamHoverClass(team.id)}
                           `}
                         >
-                          {/* Team Name */}
                           <div className="flex items-center gap-4">
                             <div className={`w-2 h-2 rounded-full ${team.color}`}></div>
                             <span className="text-base font-normal text-neutral-900">
@@ -161,7 +186,6 @@ export default function Home() {
                             </span>
                           </div>
 
-                          {/* Wins */}
                           <div className="text-right">
                             <div className="text-xs text-neutral-400 uppercase tracking-wider mb-1">
                               승
@@ -180,7 +204,6 @@ export default function Home() {
                             </div>
                           </div>
 
-                          {/* Losses */}
                           <div className="text-right">
                             <div className="text-xs text-neutral-400 uppercase tracking-wider mb-1">
                               패
@@ -217,7 +240,6 @@ export default function Home() {
             </section>
           )}
 
-          {/* Players Section */}
           {activeNav === 'players' && (
             <section className="mb-32">
               <div className="mb-16">
@@ -313,7 +335,6 @@ export default function Home() {
             </section>
           )}
 
-          {/* Other sections can be added here */}
           {activeNav === 'schedule' && (
             <section className="mb-32">
               <div className="mb-16">
@@ -323,10 +344,192 @@ export default function Home() {
                 <p className="text-base text-neutral-600">
                   오늘의 경기 및 향후 일정
                 </p>
+                <p className="text-sm text-neutral-500">
+                  이번 달 총 {totalGames}경기 예정
+                </p>
               </div>
-              <div className="text-center py-20 text-neutral-400">
-                경기 일정 데이터 준비 중...
-              </div>
+
+              {scheduleLoading && (
+                <div className="text-center py-20 text-neutral-400">
+                  경기 일정을 불러오는 중...
+                </div>
+              )}
+
+              {scheduleError && (
+                <div className="text-center py-20">
+                  <div className="text-red-600 mb-4">일정 데이터를 불러올 수 없습니다</div>
+                  <button 
+                    onClick={handleRefresh}
+                    className="px-6 py-2 bg-neutral-900 text-white rounded hover:bg-neutral-700 transition-colors"
+                  >
+                    다시 시도
+                  </button>
+                </div>
+              )}
+
+              {!scheduleLoading && !scheduleError && (
+                <div className="space-y-12">
+                  <div>
+                    <div className="flex items-center gap-2 mb-6">
+                      <Calendar size={20} className="text-neutral-600" />
+                      <h3 className="text-lg font-medium text-neutral-900">
+                        오늘의 경기
+                      </h3>
+                      <span className="text-sm text-neutral-500">
+                        ({todayStr})
+                      </span>
+                    </div>
+                    
+                    {todayGames.length === 0 ? (
+                      <div className="text-center py-8 text-neutral-400 bg-neutral-25 rounded-lg">
+                        오늘은 경기가 없습니다
+                      </div>
+                    ) : (
+                      <div className="grid gap-4">
+                        {todayGames.map((game) => (
+                          <div 
+                            key={game.id}
+                            className="flex items-center justify-between p-6 bg-white border border-neutral-200 rounded-lg hover:shadow-md transition-shadow"
+                          >
+                            <div className="flex items-center gap-6">
+                              <div className="text-lg font-medium text-neutral-900">
+                                {game.away_team} vs {game.home_team}
+                              </div>
+                              <div className="flex items-center gap-2 text-sm text-neutral-500">
+                                <Clock size={16} />
+                                {game.game_time}
+                              </div>
+                              <div className="flex items-center gap-2 text-sm text-neutral-500">
+                                <MapPin size={16} />
+                                {game.stadium}
+                              </div>
+                            </div>
+                            <div className={`px-3 py-1 rounded-full text-xs font-medium ${
+                              game.status === 'scheduled' ? 'bg-green-100 text-green-800' :
+                              game.status === 'completed' ? 'bg-gray-100 text-gray-800' :
+                              game.status === 'postponed' ? 'bg-yellow-100 text-yellow-800' :
+                              'bg-red-100 text-red-800'
+                            }`}>
+                              {game.status === 'scheduled' ? '예정' :
+                               game.status === 'completed' ? '종료' :
+                               game.status === 'postponed' ? '연기' : '취소'}
+                            </div>
+                          </div>
+                        ))}
+                      </div>
+                    )}
+                  </div>
+
+                  <div>
+                    <div className="flex items-center gap-2 mb-6">
+                      <Calendar size={20} className="text-neutral-600" />
+                      <h3 className="text-lg font-medium text-neutral-900">
+                        내일의 경기
+                      </h3>
+                      <span className="text-sm text-neutral-500">
+                        ({tomorrowStr})
+                      </span>
+                    </div>
+                    
+                    {tomorrowGames.length === 0 ? (
+                      <div className="text-center py-8 text-neutral-400 bg-neutral-25 rounded-lg">
+                        내일은 경기가 없습니다
+                      </div>
+                    ) : (
+                      <div className="grid gap-4">
+                        {tomorrowGames.map((game) => (
+                          <div 
+                            key={game.id}
+                            className="flex items-center justify-between p-6 bg-white border border-neutral-200 rounded-lg hover:shadow-md transition-shadow"
+                          >
+                            <div className="flex items-center gap-6">
+                              <div className="text-lg font-medium text-neutral-900">
+                                {game.away_team} vs {game.home_team}
+                              </div>
+                              <div className="flex items-center gap-2 text-sm text-neutral-500">
+                                <Clock size={16} />
+                                {game.game_time}
+                              </div>
+                              <div className="flex items-center gap-2 text-sm text-neutral-500">
+                                <MapPin size={16} />
+                                {game.stadium}
+                              </div>
+                            </div>
+                            <div className="px-3 py-1 rounded-full text-xs font-medium bg-blue-100 text-blue-800">
+                              예정
+                            </div>
+                          </div>
+                        ))}
+                      </div>
+                    )}
+                  </div>
+
+                  <div>
+                    <h3 className="text-lg font-medium text-neutral-900 mb-6">
+                      이번 달 경기 일정
+                    </h3>
+                    
+                    <div className="border-t border-neutral-200">
+                      {/* Header */}
+                      <div className="grid grid-cols-5 gap-6 py-4 border-b border-neutral-100 bg-neutral-25">
+                        <span className="text-xs text-neutral-400 uppercase tracking-wider">
+                          날짜
+                        </span>
+                        <span className="text-xs text-neutral-400 uppercase tracking-wider">
+                          경기
+                        </span>
+                        <span className="text-xs text-neutral-400 uppercase tracking-wider text-center">
+                          시간
+                        </span>
+                        <span className="text-xs text-neutral-400 uppercase tracking-wider">
+                          구장
+                        </span>
+                        <span className="text-xs text-neutral-400 uppercase tracking-wider text-center">
+                          상태
+                        </span>
+                      </div>
+
+                      {recentGames.map((game) => (
+                        <div
+                          key={game.id}
+                          className="grid grid-cols-5 gap-6 py-4 border-b border-neutral-50 
+                                   hover:bg-neutral-25 hover:-mx-8 hover:px-8 cursor-pointer
+                                   transition-all duration-200"
+                        >
+                          <div className="text-sm text-neutral-600 font-mono">
+                            {new Date(game.date).toLocaleDateString('ko-KR', {
+                              month: 'short',
+                              day: 'numeric',
+                              weekday: 'short'
+                            })}
+                          </div>
+                          <div className="text-sm font-medium text-neutral-900">
+                            {game.away_team} vs {game.home_team}
+                          </div>
+                          <div className="text-sm text-neutral-600 text-center font-mono">
+                            {game.game_time}
+                          </div>
+                          <div className="text-sm text-neutral-600">
+                            {game.stadium}
+                          </div>
+                          <div className="text-center">
+                            <span className={`inline-block px-2 py-1 rounded-full text-xs font-medium ${
+                              game.status === 'scheduled' ? 'bg-green-100 text-green-800' :
+                              game.status === 'completed' ? 'bg-gray-100 text-gray-800' :
+                              game.status === 'postponed' ? 'bg-yellow-100 text-yellow-800' :
+                              'bg-red-100 text-red-800'
+                            }`}>
+                              {game.status === 'scheduled' ? '예정' :
+                               game.status === 'completed' ? '종료' :
+                               game.status === 'postponed' ? '연기' : '취소'}
+                            </span>
+                          </div>
+                        </div>
+                      ))}
+                    </div>
+                  </div>
+                </div>
+              )}
             </section>
           )}
 
