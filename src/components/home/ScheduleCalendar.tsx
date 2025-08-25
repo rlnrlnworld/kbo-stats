@@ -213,10 +213,10 @@ export default function ScheduleCalendar({ selectedDate, onDateSelect }: Schedul
                     onClick={() => handleDayClick(day)}
                     className={`
                       aspect-square p-4 cursor-pointer border-b border-r border-neutral-100 transition-all duration-300
-                      relative hover:bg-gradient-to-br hover:from-neutral-50 hover:to-neutral-100 group bg-white
+                      relative group bg-white
                       hover:shadow-sm transform
                       ${today ? 'border border-black' : ''}
-                      ${selected ? 'bg-gradient-to-br from-neutral-800 to-neutral-900 text-white z-20' : ''}
+                      ${selected ? 'bg-gradient-to-br from-neutral-800 to-neutral-900 text-white z-20' : 'hover:bg-gradient-to-br hover:from-neutral-50 hover:to-neutral-100'}
                     `}
                   >
                     <div className={`
