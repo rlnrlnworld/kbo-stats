@@ -257,15 +257,12 @@ export default function ScheduleCalendar({ selectedDate, onDateSelect }: Schedul
           <div className="sticky top-6">
             {selectedDay ? (
               <div className="border border-neutral-200 rounded-xl overflow-hidden shadow-lg bg-white">
-                {/* 헤더 섹션 업그레이드 */}
-                <div className="bg-gradient-to-r from-neutral-800 to-neutral-900 text-white p-6 relative overflow-hidden">
-                  <div className="absolute inset-0 bg-[radial-gradient(circle_at_50%_50%,rgba(255,255,255,0.1),transparent)] pointer-events-none"></div>
+                <div className="bg-black text-white p-6 relative overflow-hidden">
                   <div className="relative z-10">
                     <div className="flex items-center gap-3 mb-3">
                       <div className="p-2 bg-white/10 rounded-lg backdrop-blur-sm">
                         <Calendar size={18} strokeWidth={1.5} />
                       </div>
-                      <div>
                         <h3 className="font-semibold text-xl">
                           {selectedDateInfo?.monthDay}
                         </h3>
@@ -277,21 +274,6 @@ export default function ScheduleCalendar({ selectedDate, onDateSelect }: Schedul
                             </span>
                           )}
                         </p>
-                      </div>
-                    </div>
-                    
-                    {/* 경기 수 표시 */}
-                    <div className="flex items-center gap-2 mt-4 pt-4 border-t border-white/20">
-                      <Users size={16} strokeWidth={1.5} className="text-neutral-300" />
-                      <span className="text-sm text-neutral-300 font-medium">
-                        총 {selectedDayGames.length}경기
-                      </span>
-                      {selectedDayGames.length > 0 && (
-                        <div className="ml-auto flex items-center gap-1">
-                          <Star size={14} strokeWidth={1.5} className="text-yellow-400 fill-yellow-400" />
-                          <span className="text-xs text-neutral-300">경기일</span>
-                        </div>
-                      )}
                     </div>
                   </div>
                 </div>
@@ -321,24 +303,6 @@ export default function ScheduleCalendar({ selectedDate, onDateSelect }: Schedul
                           key={game.id}
                           className="border border-neutral-200 rounded-xl p-6 bg-white shadow-sm hover:shadow-md transition-all duration-300 hover:border-neutral-300"
                         >
-                          {/* 경기 번호 표시 */}
-                          <div className="flex items-center justify-between mb-6">
-                            <div className="flex items-center gap-2">
-                              <div className="px-3 py-1 bg-gradient-to-r from-neutral-100 to-neutral-200 rounded-full">
-                                <span className="text-xs font-mono text-neutral-600">경기 {index + 1}</span>
-                              </div>
-                              {game.status === 'completed' && (
-                                <div className="px-2 py-1 bg-emerald-100 rounded-full">
-                                  <Trophy size={12} className="text-emerald-600" />
-                                </div>
-                              )}
-                            </div>
-                            <span className={`px-3 py-1 rounded-full border font-medium text-xs shadow-sm ${getStatusColor(game.status)}`}>
-                              {getStatusText(game.status)}
-                            </span>
-                          </div>
-
-                          {/* 팀 매치업 - 더 시각적으로 업그레이드 */}
                           <div className="mb-6">
                             <div className="flex items-center justify-between p-4 bg-gradient-to-r from-neutral-50 to-neutral-100 rounded-xl">
                               <div className="flex items-center gap-4 flex-1">
@@ -372,7 +336,7 @@ export default function ScheduleCalendar({ selectedDate, onDateSelect }: Schedul
                                   <div className="font-semibold text-neutral-900 text-base">
                                     {TEAM_NAMES[game.home_team] || game.home_team}
                                   </div>
-                                  <div className="text-xs text-neutral-500 font-medium bg-blue-100 text-blue-700 px-2 py-1 rounded-full inline-block mt-1">
+                                  <div className="text-xs font-medium bg-black text-white px-2 py-1 rounded-full inline-block mt-1">
                                     홈
                                   </div>
                                 </div>
@@ -412,23 +376,6 @@ export default function ScheduleCalendar({ selectedDate, onDateSelect }: Schedul
                                 </div>
                               </div>
                             </div>
-
-                            {/* 승부 결과 (완료된 경기만) */}
-                            {game.status === 'completed' && game.winner && (
-                              <div className="mt-6 p-4 bg-gradient-to-r from-emerald-50 to-emerald-100 rounded-xl border border-emerald-200">
-                                <div className="flex items-center gap-3">
-                                  <div className="p-2 bg-emerald-500 rounded-lg">
-                                    <Trophy size={16} strokeWidth={1.5} className="text-white" />
-                                  </div>
-                                  <div>
-                                    <div className="font-semibold text-emerald-900 text-sm">승리팀</div>
-                                    <div className="font-mono text-emerald-700 text-base font-medium">
-                                      {TEAM_NAMES[game.winner] || game.winner}
-                                    </div>
-                                  </div>
-                                </div>
-                              </div>
-                            )}
                           </div>
                         </div>
                       ))}
