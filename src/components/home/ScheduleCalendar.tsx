@@ -2,7 +2,7 @@
 
 import { TEAM_NAMES } from '@/constants/teamData'
 import { useCurrentMonthSchedule } from '@/hooks/useMonthlySchedule'
-import { Calendar, Clock, MapPin, ChevronLeft, ChevronRight, Activity } from 'lucide-react'
+import { Calendar, Clock, MapPin, ChevronLeft, ChevronRight, Activity, Crown } from 'lucide-react'
 import React, { useState } from 'react'
 
 interface ScheduleCalendarProps {
@@ -326,7 +326,7 @@ export default function ScheduleCalendar({ selectedDate, onDateSelect }: Schedul
                                   <div 
                                     className="absolute -top-1 -left-1 w-5 h-5 rounded-full flex items-center justify-center"
                                   >
-                                    <span className="text-[10px] text-white font-bold">🏆</span>
+                                    <Crown stroke='#f5d33c' fill='#f5d33c' size={20} />
                                   </div>
                                 )}
                                 <TeamLogo teamName={game.away_team} className="w-12 h-12" />
