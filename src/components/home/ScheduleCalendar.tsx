@@ -304,26 +304,26 @@ export default function ScheduleCalendar({ selectedDate, onDateSelect }: Schedul
 
                           <div className="flex items-center mb-6 bg-white">
                             <div className={`flex-1 flex flex-col items-center gap-4 p-4 ${game.status === 'completed' ? 'justify-between' : 'justify-center'}`}>
-                              <div className='flex items-center gap-2'>
-                                <div className="relative">
-                                  <TeamLogo teamName={game.away_team} className="w-12 h-12" />
-                                  <div className="absolute -bottom-1 -right-1 w-5 h-5 bg-neutral-600 rounded-full flex items-center justify-center">
-                                    <span className="text-[10px] text-white font-bold">A</span>
-                                  </div>
+                              <div className="relative">
+                                <TeamLogo teamName={game.away_team} className="w-12 h-12" />
+                                <div 
+                                  className="absolute -bottom-1 -right-1 w-5 h-5 rounded-full flex items-center justify-center"
+                                  style={{ backgroundColor: `var(--team-${game.away_team})` }}
+                                >
+                                  <span className="text-[10px] text-white font-bold">H</span>
                                 </div>
-                                <div>
-                                  <div className="font-bold text-lg text-neutral-900 mb-1">
-                                    {TEAM_NAMES[game.away_team] || game.away_team}
-                                  </div>
+                              </div>
+                              <div className="flex-1">
+                                <div className="font-bold text-lg text-neutral-900 mb-1">
+                                  {TEAM_NAMES[game.away_team] || game.away_team}
                                 </div>
                               </div>
                               {game.away_score !== undefined && game.away_score !== null && (
                                 <div className="text-right">
                                   <div 
-                                    className="text-3xl font-black text-white px-6 py-3 rounded-xl shadow-lg border-2"
+                                    className="text-3xl font-black text-white px-6 py-3 "
                                     style={{ 
-                                      backgroundColor: `var(--team-${game.away_team})`,
-                                      borderColor: `var(--team-${game.away_team})`
+                                      color: `var(--team-${game.away_team})`,
                                     }}
                                   >
                                     {game.away_score}
@@ -356,10 +356,9 @@ export default function ScheduleCalendar({ selectedDate, onDateSelect }: Schedul
                               {game.home_score !== undefined && game.home_score !== null && (
                                 <div className="text-right">
                                   <div 
-                                    className="text-3xl font-black text-white px-6 py-3 rounded-xl shadow-lg border-2"
+                                    className="text-3xl font-black text-white px-6 py-3 "
                                     style={{ 
-                                      backgroundColor: `var(--team-${game.home_team})`,
-                                      borderColor: `var(--team-${game.home_team})`
+                                      color: `var(--team-${game.home_team})`,
                                     }}
                                   >
                                     {game.home_score}
