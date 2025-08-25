@@ -242,7 +242,7 @@ export default function ScheduleCalendar({ selectedDate, onDateSelect }: Schedul
                     )}
 
                     {today && !selected && (
-                      <div className="absolute top-3 right-3">
+                      <div className="absolute top-5 right-3">
                         <div className="w-2.5 h-2.5 bg-black rounded-full animate-pulse shadow-sm"></div>
                       </div>
                     )}
@@ -259,20 +259,15 @@ export default function ScheduleCalendar({ selectedDate, onDateSelect }: Schedul
               <div className="border border-neutral-200 rounded-xl overflow-hidden shadow-lg bg-white">
                 <div className="bg-black text-white p-6 relative overflow-hidden">
                   <div className="relative z-10">
-                    <div className="flex items-center gap-3 mb-3">
+                    <div className="flex items-center gap-3">
                       <div className="p-2 bg-white/10 rounded-lg backdrop-blur-sm">
-                        <Calendar size={18} strokeWidth={1.5} />
+                        <Calendar size={18} strokeWidth={1} />
                       </div>
                         <h3 className="font-semibold text-xl">
                           {selectedDateInfo?.monthDay}
                         </h3>
                         <p className="text-neutral-300 text-sm font-medium flex items-center gap-2">
                           {selectedDateInfo?.dayOfWeek}
-                          {selectedDateInfo?.isToday && (
-                            <span className="px-2 py-1 bg-blue-500 text-white text-xs rounded-full font-medium animate-pulse">
-                              오늘
-                            </span>
-                          )}
                         </p>
                     </div>
                   </div>
@@ -284,9 +279,6 @@ export default function ScheduleCalendar({ selectedDate, onDateSelect }: Schedul
                       <div className="mb-6 relative">
                         <div className="w-16 h-16 bg-gradient-to-br from-neutral-100 to-neutral-200 rounded-2xl flex items-center justify-center mx-auto shadow-sm">
                           <Calendar size={28} strokeWidth={1} className="text-neutral-400" />
-                        </div>
-                        <div className="absolute -bottom-1 -right-1 w-6 h-6 bg-neutral-300 rounded-full flex items-center justify-center">
-                          <span className="text-xs text-white font-bold">0</span>
                         </div>
                       </div>
                       <h4 className="font-semibold text-neutral-900 mb-2 text-lg">경기가 없는 날</h4>
