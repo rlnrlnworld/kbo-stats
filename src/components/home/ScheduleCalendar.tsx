@@ -82,7 +82,7 @@ export default function ScheduleCalendar({ selectedDate, onDateSelect }: Schedul
   }
 
   return (
-    <div className="bg-white">
+    <div className="p-1">
       <div className="flex items-center justify-between mb-8">
         <div>
           <h2 className="text-2xl font-normal text-neutral-900">
