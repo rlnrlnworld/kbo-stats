@@ -368,31 +368,15 @@ export default function ScheduleCalendar({ selectedDate, onDateSelect }: Schedul
                             </div>
                           </div>
                           
-                          <div className="space-y-4">
-                            <div className="grid grid-cols-1 gap-3">
-                              <div className="flex items-center gap-3 p-3 bg-neutral-50 rounded-lg">
-                                <div className="p-2 bg-blue-100 rounded-lg">
-                                  <Clock size={16} strokeWidth={1.5} className="text-blue-600" />
-                                </div>
-                                <div>
-                                  <div className="font-medium text-neutral-900 text-sm">경기 시간</div>
-                                  <div className="font-mono text-neutral-600 text-sm">
-                                    {game.game_time ? game.game_time.slice(0, 5) : '시간 미정'}
-                                  </div>
-                                </div>
-                              </div>
-                              
-                              <div className="flex items-center gap-3 p-3 bg-neutral-50 rounded-lg">
-                                <div className="p-2 bg-emerald-100 rounded-lg">
-                                  <MapPin size={16} strokeWidth={1.5} className="text-emerald-600" />
-                                </div>
-                                <div>
-                                  <div className="font-medium text-neutral-900 text-sm">경기장</div>
-                                  <div className="text-neutral-600 text-sm">
-                                    {game.stadium || '구장 미정'}
-                                  </div>
-                                </div>
-                              </div>
+                          <div className="space-y-4 flex items-center justify-center text-xs text-neutral-400">
+                            <div className='flex items-center gap-2'>
+                              <Clock size={12} strokeWidth={1} />
+                              <span>{game.game_time}</span>
+                            </div>
+                            <div className='h-4 w-1 border-r border-neutral-300'></div>
+                            <div className='flex items-center gap-2'>
+                              <MapPin size={12} strokeWidth={1} />
+                              <span>{game.stadium?.slice(0,3)}</span>
                             </div>
                           </div>
                         </div>
